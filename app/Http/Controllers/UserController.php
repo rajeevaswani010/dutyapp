@@ -139,4 +139,47 @@ class UserController extends Controller
 
         return json_encode(array("Status" =>  1, "Message" => "Mission Deleted Successfully"));
     }
+
+    public function assignMissions(Request $request){
+        try {
+            if( !Auth::check() )
+            {
+                return redirect()->route('login')
+                    ->withErrors([
+                    'email' => 'Please login to access the dashboard.',
+                ])->onlyInput('email');
+            }
+            $Input = $request->all();
+            Log::info($request);
+
+            $userObj = User::find($request->user_id);
+            $userObj->missions()->attach($request->missions);
+            return json_encode(array("Status" =>  1, "Message" => "Mission assignment success"));
+        } catch(Exception $e){
+            Log::error($e);
+            return json_encode(array("Status" =>  0, "Message" => "Mission assignment failed"));
+        }
+    }
+
+    public function unAssignMissions(Request $request){
+        try {
+            if( !Auth::check() )
+            {
+                return redirect()->route('login')
+                    ->withErrors([
+                    'email' => 'Please login to access the dashboard.',
+                ])->onlyInput('email');
+            }
+            $Input = $request->all();
+            Log::info($request);
+
+            $userObj = User::find($request->user_id);
+
+            $userObj->missions()->sync($missions);
+            return json_encode(array("Status" =>  1, "Message" => "Mission assignment success"));
+        } catch(Exception $e){
+            Log::error($e);
+            return json_encode(array("Status" =>  0, "Message" => "Mission assignment failed"));
+        }
+    }
 }

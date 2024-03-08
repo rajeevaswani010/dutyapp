@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Session;
 
 use App\Models\Mission;
+use App\Models\User;
 use App\Models\Department;
 use App\Models\Employee;
 
@@ -156,6 +157,25 @@ class MissionController extends Controller
         $Input = $request->all();
 
         return view('mission.edit', compact("ActiveAction"));
+    }
+
+    public function getMissions(Request $request){
+        if( !Auth::check() )
+        {
+            return redirect()->route('login')
+                ->withErrors([
+                'email' => 'Please login to access the dashboard.',
+            ])->onlyInput('email');
+        }
+		
+        $user = User::find($request->user_id);
+        Log::debug("inside mission controller - " . $user);
+
+		$ActiveAction = "dashboard";
+		$Data = Mission::where("department",$user["department"])->get();
+
+        Log::debug($Data);
+        return json_encode(array("Status" =>  1, "Data" => $Data ,"Message" => "Mission fetched successfully"));
     }
 
     public function update(Request $request){

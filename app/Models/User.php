@@ -52,4 +52,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function missions(){
+        return $this->belongsToMany(Mission::class, 'mission_users', 'user_id', 'mission_id');
+    }
 }

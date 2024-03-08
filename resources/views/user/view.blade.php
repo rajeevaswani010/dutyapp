@@ -35,25 +35,12 @@
                 <form>
                     <div class="bg-light p-4">
                         <div class="row row align-items-end m-1">
-                            <div class="col">
-                                <label>{{ __("Mission Number") }}</label>
-                                <input type="text" class="form-control" id="number" name="number" value="{{ @$_GET['number'] }}">
-                            </div>
 
-                            <div class="col">
+                            <div class="col-md-2">
                                 <label>{{ __("Department") }}</label>
                                 <input type="text" class="form-control" id="department" name="department" value="{{ @$_GET['department'] }}">
                             </div>
 
-                            <div class="col">
-                                <label>{{ __("Pickup From Date") }}</label>
-                                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ @$_GET['start_date'] }}" onchange="validateDateRange()">
-                            </div>
-
-                            <div class="col">
-                                <label>{{ __("Pickup To Date") }}</label>
-                                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ @$_GET['end_date'] }}" onchange="validateDateRange()">
-                            </div>
                             <div class="col"><button class="btn btn-primary" role="button">{{ __("Search") }}</button></div>
                         </div>
                     </div>
@@ -66,18 +53,17 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __("Username") }}</th>
-                                        <th>{{ __("Purpose") }}</th>
-                                        <th>{{ __("City") }}</th>
-                                        <th>{{ __("Country") }}</th>
+                                        <th>{{ __("Employee Id") }}</th>
+                                        <th>{{ __("Designation") }}</th>
                                         <th>{{ __("Department") }}</th>
-                                        <th>{{ __("Directorate") }}</th>
-                                        <th>{{ __("Number of staff") }}</th>
-                                        <th>{{ __("Number of days") }}</th>
-                                        <th>{{ __("Number of nights") }}</th>
-                                        <th>{{ __("Start Date") }}</th>
-                                        <th>{{ __("End Date") }}</th>
-                                        <th>{{ __("Vehicle Required") }}</th>
-                                        <th>{{ __("Air Ticket Required") }}</th>
+                                        <th>{{ __("Gender") }}</th>
+                                        <th>{{ __("Phone") }}</th>
+                                        <th>{{ __("Email") }}</th>
+                                        <th>{{ __("Address") }}</th>
+                                        <th>{{ __("Date of Birth") }}</th>
+                                        <th>{{ __("Date of Joining") }}</th>
+                                        <th>{{ __("Active") }}</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,19 +71,21 @@
                                     @foreach($Data as $DT)
 
                                         <tr class="font-style">
-                                            <!-- <td>{{ $DT->id }}</td>
-                                            <td>{{ $DT->purpose }}</td>
-                                            <td>{{ $DT->country }}</td>
-                                            <td>{{ $DT->city }}</td>
+                                            <td>{{ $DT->name }}</td>
+                                            <td>{{ $DT->employee_id }}</td>
+                                            <td>{{ $DT->designation }}</td>
                                             <td>{{ $DT->department }}</td>
-                                            <td>{{ $DT->directorate }}</td>
-                                            <td>{{ $DT->num_of_staff }}</td>
-                                            <td>{{ $DT->num_of_days }}</td>
-                                            <td>{{ $DT->num_of_nights }}</td>
-                                            <td>{{ $DT->start_date }}</td>
-                                            <td>{{ $DT->end_date }}</td>
-                                            <td>{{ $DT->vehicle_required }}</td>
-                                            <td>{{ $DT->air_ticket_required }}</td> -->
+                                            <td>{{ $DT->gender }}</td>
+                                            <td>{{ $DT->phone }}</td>
+                                            <td>{{ $DT->email }}</td>
+                                            <td>{{ $DT->address }}</td>
+                                            <td>{{ $DT->dob }}</td>
+                                            <td>{{ $DT->doj }}</td>
+                                            <td>{{ $DT->is_active }}</td>
+                                            <td>
+                                                <button type="button" title="Assign Missions" class="btn btn-primary btn-sm" data-bs-toggle="modal" 
+                                                    data-bs-target="#assignMissionModal" onclick="onAssignMission()" data-id="{{ $DT->id }}">Assign</button>
+                                            </td>
                                         </tr>
                                     @endforeach
 
@@ -112,163 +100,175 @@
     </div>    
 </div>
 
-<!-- Modal create mission -->
-<div class="modal" id="createMissionModal" tabindex="-1" role="dialog" aria-labelledby="createMissionModal" aria-hidden="true">
+<!-- Modal assign mission  START-->
+
+<div class="modal" id="assignMissionModal"  tabindex="-1" role="dialog" aria-labelledby="assignMissionModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createMissonModal">{{ __("Create New Mission") }}</h5>
+                <h5 class="modal-title" id="assignMissionModal">{{ __("Select Mission") }}</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-xl-12">
-                        {!! Form::open(['id' => 'createmission']) !!}
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label for="purpose" class="col-form-label text-dark">{{ __("Purpose") }}</label>
-                                <input class="form-control font-style" name="purpose" type="text" id="purpose" required />
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="country" class="col-form-label text-dark">{{ __("Country") }}</label>
-                                <input class="form-control font-style" name="country" type="text" id="country" required />
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="city" class="col-form-label text-dark">{{ __("City") }}</label>
-                                <input class="form-control font-style" name="city" type="text" id="city" required />
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="start_date" class="col-form-label text-dark">{{ __("Start") }}</label>
-                                <input class="form-control font-style" name="start_date" type="date" id="start_date" required />
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="end_date" class="col-form-label text-dark">{{ __("End") }}</label>
-                                <input class="form-control font-style" name="end_date" type="date" id="end_date" required />
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="travel_start_date" class="col-form-label text-dark">{{ __("Travel Start") }}</label>
-                                <input class="form-control font-style" name="travel_start_date" type="date" id="travel_start_date" required />
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="travel_return_date" class="col-form-label text-dark">{{ __("Travel Return") }}</label>
-                                <input class="form-control font-style" name="travel_return_date" type="date" id="travel_return_date" required />
-                            </div>
-
-
-                            <div class="form-group col-md-4">
-                                <label for="num_of_staff" class="col-form-label text-dark">{{ __("Number of Staff") }}</label>
-                                <input class="form-control font-style" name="num_of_staff" type="number" id="num_of_staff" required min="0" step="1" />
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="num_of_days" class="col-form-label text-dark">{{ __("Number of Days") }}</label>
-                                <input class="form-control font-style" name="num_of_days" type="number" id="num_of_days" required min="0" step="1"/>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="num_of_nights" class="col-form-label text-dark">{{ __("Number of Nights") }}</label>
-                                <input class="form-control font-style" name="num_of_nights" type="number" id="num_of_nights" required min="0" step="1"/>
-                            </div>
-
-                            <!-- <div class="form-group col-md-4">
-                                <label for="section" class="col-form-label text-dark">{{ __("Section") }}</label>
-                                <input class="form-control font-style" name="section" type="text" id="section" required/>
-                            </div> -->
-                            <div class="form-group col-md-8">
-                                <label for="department" class="col-form-label text-dark">{{ __("Department") }}</label>
-                                <input class="form-control font-style" name="department" type="text" id="department" required/>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="directorate" class="col-form-label text-dark">{{ __("Directorate") }}</label>
-                                <input class="form-control font-style" name="directorate" type="text" id="directorate" required/>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="travelling_area_from" class="col-form-label text-dark">{{ __("Travelling Area From") }}</label>
-                                <input class="form-control font-style" name="travelling_area_from" type="text" id="travelling_area_from" required/>
-                            </div>
-
-                            <div class="form-check col-md-6 mt-4 mr-4">
-                                <input class="form-check-input ml-2" type="checkbox" name="air_ticket_required" value="" id="air_ticket_required">
-                                <label class="form-check-label" for="air_ticket_required">
-                                    Air Ticket Required ?
-                                </label>
-                            </div>
-                            <div class="form-check col-md-6 mt-4">
-                                <input class="form-check-input ml-2" type="checkbox" name="vehicle_required" value="" id="vehicle_required">
-                                <label class="form-check-label" for="vehicle_required">
-                                    Vehicle Required ?
-                                </label>
-                            </div>
-
-                            <div class="form-group col-md-12">
-                                <label for="remarks" class="col-form-label text-dark">{{ __("Remarks") }}</label>
-                                <textarea class="form-control font-style" name="remarks" id="remarks" placeholder="enter remarks" rows=3></textarea>
-                            </div>
-                            
-                        </div>
-
+                <div id="missions">
+                    <div id="missionList">
+                        Loading...
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{ __("Close") }}</button>
-                <input class="btn btn-xs btn-primary" type="submit" value='{{ __("Send") }}'>
+                <input class="btn btn-xs btn-primary" type="submit" id="assignMissions" value='{{ __("Send") }}'>
             </div>
             {!! Form::close() !!}
         </div>
     </div>
 </div>
 <script>
-$("#createmission").submit(function (event) {
-    event.preventDefault();
+    function onAssignMission(user_id){
+        var user_id = event.target.dataset.id;
+        var missionSelected = {};
 
-    var formData = {
-        purpose: $("#createmission #purpose").val(),
-        country:$("#createmission #country").val(),
-        city:$("#createmission #city").val(),
-        num_of_staff: $("#createmission #num_of_staff").val(),
-        num_of_days: $("#createmission #num_of_days").val(),
-        num_of_nights:$("#createmission #num_of_nights").val(),
-        section:$("#createmission #section").val(),
-        department:$("#createmission #department").val(),
-        directorate:$("#createmission #directorate").val(),
-        travelling_area_from: $("#createmission #travelling_area_from").val(),
-        start_date:$("#createmission #start_date").val(),
-        end_date:$("#createmission #end_date").val(),
-        travel_start_date:$("#createmission #travel_start_date").val(),
-        travel_return_date:$("#createmission #travel_return_date").val(),
-        remarks:$("#createmission #remarks").val(),
-        air_ticket_required:$("#createmission #air_ticket_required").is(":checked"),
-        vehicle_required:$("#createmission #vehicle_required").is(":checked")
-    };
+        $("#assignMissionModal").css("display", "block");
+        $("#missionList").html("Loading...");
 
-    // showloading();
-    $.ajax({
-        url: "{{ URL('mission/add') }}",
-        method: "POST",
-        headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-        data: formData,
-        dataType: "json",
-        encode: true,
-        success: function( data, textStatus, jqXHR ) {
-            // hideloading();
-            $('#createMissionModal').modal("hide");
-            alert("mission successfully added");
-            window.location.reload();
-        },
-        error: function( jqXHR, textStatus, errorThrown ) {
-            // hideloading();
-            alert("error");
+        var form_data = {
+            user_id: user_id
         }
-    })
-});
+
+
+        let callbacks = {
+            success: function(data){
+                $("#missionList").empty();
+                console.log(data);
+                let tableData = data;
+
+                // Create a table element
+                var table = document.createElement("table");
+                table.id = "missionTable";
+                table.classList.add("table");
+                table.classList.add("table-hover");
+                // Create a table header row
+                var headerRow = table.insertRow();
+                // Add table headers
+                for (var key in tableData[0]) {
+                    var headerCell = headerRow.insertCell();
+                    headerCell.textContent = key.toUpperCase();
+                }
+                // Create and populate the table rows with data
+                tableData.forEach(function(item) {
+                    var row = table.insertRow();
+                    
+                    var checkboxCell = row.insertCell();
+                    var checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.dataset.arg = item.id;
+                    checkbox.classList.add("form-check-input")
+                    checkboxCell.appendChild(checkbox);
+
+                    // row.addEventListener("click", function() {
+                    //     // Toggle row selection on click
+                    //     checkbox.checked = !(checkbox.checked);
+                    // }); 
+                    
+                    checkbox.addEventListener("change", function(){
+                        var id = event.target.dataset.arg;
+                        if(event.target.checked){
+                            missionSelected[id] = 1;
+                        } else {
+                            delete missionSelected[id];
+                        }
+                    })
+
+                    for (var key in item) {
+                        var cell = row.insertCell();
+                        cell.textContent = item[key];
+                    }
+                });
+
+                var newDiv = document.createElement("div");
+                // Add a class to the div
+                newDiv.classList.add("table-responsive");
+                newDiv.appendChild(table);
+                $("#missionList").append(newDiv);
+
+                let missiontable = new DataTable('#missionTable'); //to activate datatable.. 
+            },
+
+            failure: function(errmsg){
+                $("#assignMissionModal").css("display", "block");
+                $("#missionList").html(errmsg);
+            }
+        }
+
+        $.ajax({
+            url: "{{ URL('mission/getAll') }}",
+            method: "GET",
+            headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+            data: form_data,
+            dataType: "json",
+            encode: true,
+            success: function( data, textStatus, jqXHR ) {
+                console.log("mission fetched successfully");
+                callbacks.success(data.Data);
+                // window.location.reload();
+            },
+            error: function( jqXHR, textStatus, errorThrown ) {
+                // hideloading();
+                alert("error");
+                callbacks.failure("fail to fetch data");
+            }
+        });
+
+        $("#assignMissions").click(function (event) {
+            event.preventDefault();
+
+            console.log("inside assign missions");
+            var missions=[];
+            for (var key in missionSelected) {
+                if (missionSelected.hasOwnProperty(key)) {
+                    console.log("Key:", key);
+                    missions.push(key);
+                }
+            }
+            var form_data = {
+                user_id: user_id,
+                missions: missions
+            }
+
+            $.ajax({
+                url: "{{ URL('user/assignMissions') }}",
+                method: "POST",
+                headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                data: form_data,
+                dataType: "json",
+                encode: true,
+                success: function( data, textStatus, jqXHR ) {
+                    console.log("operation performed successfully");
+                    $("#assignMissionModal").modal('hide');
+                    alert("success");
+                    // window.location.reload();
+                },
+                error: function( jqXHR, textStatus, errorThrown ) {
+                    // hideloading();
+                    alert("error");
+
+                }
+        });
+
+    });
+
+
+    }
+
 </script>
 
-<!-- modal create mission END -->
+<!-- modal assign mission END -->
 
 @endsection

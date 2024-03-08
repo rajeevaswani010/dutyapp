@@ -33,6 +33,10 @@ Route::controller(LoginRegisterController::class)->group(function() {
 });
 
 Route::post('mission/add', [MissionController::class,'add']);
+Route::get('mission/getAll', [MissionController::class,'getMissions']);
 
 Route::resource('users', UserController::class);
+Route::post('user/assignMissions', [UserController::class,'assignMissions']);
+Route::post('user/unAssignMissions', [UserController::class,'unAssignMissions']);
+
 
