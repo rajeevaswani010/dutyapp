@@ -9,5 +9,8 @@ class Mission extends Model
 {
     protected $table = 'mission';
 
+    public $timestamps = false;
+
     use HasFactory;
+    
 }

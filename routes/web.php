@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MissionController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +18,8 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::controller(LoginRegisterController::class)->group(function() {
@@ -25,6 +28,11 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::get('/login', 'login')->name('login');
     Route::post('/authenticate', 'authenticate')->name('authenticate');
     // Route::get('/dashboard', 'dashboard')->name('dashboard');
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', 'logout')->name('logout');
 });
+
+Route::post('mission/add', [MissionController::class,'add']);
+
+Route::resource('users', UserController::class);
+
