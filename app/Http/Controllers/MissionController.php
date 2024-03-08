@@ -30,7 +30,11 @@ class MissionController extends Controller
         Log::debug("inside mission controller - " . $user);
 
 		$ActiveAction = "dashboard";
-		$Data = Mission::where("department",$user["department"])->get();
+        if($user["department"] != "Admin"){
+		    $Data = Mission::where("department",$user["department"])->get();
+        } else {
+            $Data = Mission::get();
+        }
 
         if($request->start_date != ""){
             $Data = $Data->where("start_date", ">=", $request->start_date." 00:00:00");
@@ -44,9 +48,9 @@ class MissionController extends Controller
             $Data = $Data->where("id", $request->number);
         }
 
-        if($request->department != ""){
-            $Data = $Data->where("department", $request->department);
-        }
+        // if($request->department != ""){
+        //     $Data = $Data->where("department", $request->department);
+        // }
 
         Log::debug($Data);
 		return view('auth.dashboard', compact("Data","ActiveAction"));

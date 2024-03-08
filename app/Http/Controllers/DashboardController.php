@@ -29,7 +29,11 @@ class DashboardController extends Controller
         Log::debug($user);
 
 		$ActiveAction = "dashboard";
-		$Data = Mission::where("department",$user["department"])->get();
+        if($user["department"] != "Admin"){
+		    $Data = Mission::where("department",$user["department"])->get();
+        } else {
+            $Data = Mission::get();
+        }
 
         if($request->start_date != ""){
             $Data = $Data->where("start_date", ">=", $request->start_date." 00:00:00");
