@@ -140,7 +140,7 @@ class UserController extends Controller
         return json_encode(array("Status" =>  1, "Message" => "Mission Deleted Successfully"));
     }
 
-    public function assignMissions(Request $request){
+    public function assignUserToMissions(Request $request){
         try {
             if( !Auth::check() )
             {
@@ -161,7 +161,7 @@ class UserController extends Controller
         }
     }
 
-    public function unAssignMissions(Request $request){
+    public function unAssignUserFromMissions(Request $request){
         try {
             if( !Auth::check() )
             {

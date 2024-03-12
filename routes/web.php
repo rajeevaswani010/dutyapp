@@ -32,11 +32,15 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/logout', 'logout')->name('logout');
 });
 
+// Route::resource('mission', MissionController::class);
+Route::get('/mission', [MissionController::class, 'index']);
 Route::post('mission/add', [MissionController::class,'add']);
-Route::get('mission/getAll', [MissionController::class,'getMissions']);
+Route::get('/getMissions', [MissionController::class,'getMissions']);
+
 
 Route::resource('users', UserController::class);
-Route::post('user/assignMissions', [UserController::class,'assignMissions']);
-Route::post('user/unAssignMissions', [UserController::class,'unAssignMissions']);
+Route::post('/assignusertomissions', [UserController::class,'assignUserToMissions']);
+Route::post('/unassign-user-from-missions', [UserController::class,'unAssignUserFromMissions']);
+
 
 

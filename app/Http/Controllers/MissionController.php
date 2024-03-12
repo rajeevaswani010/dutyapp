@@ -17,6 +17,7 @@ use DB;
 
 class MissionController extends Controller
 {
+
 	public function index(Request $request){
         if( !Auth::check() )
         {
@@ -53,10 +54,10 @@ class MissionController extends Controller
         // }
 
         Log::debug($Data);
-		return view('auth.dashboard', compact("Data","ActiveAction"));
+		return view('mission.view', compact("Data","ActiveAction"));
     }
 
-    public function create(Request $request){
+    public function create(){
         if( !Auth::check() )
         {
             return redirect()->route('login')
@@ -69,8 +70,7 @@ class MissionController extends Controller
 
 
         $ActiveAction = "Mission";
-        $Conuntry = Country::orderBy("name")->get();
-        return view('Mission.add', compact("ActiveAction", "Conuntry", "Requirements", "CustomerId", "InviteId"));
+        return view('Mission.add', compact("ActiveAction"));
     }
 
     public function store(Request $request){
@@ -135,7 +135,7 @@ class MissionController extends Controller
         }
     }
 
-    public function show(Request $request){
+    public function show(Mission $id){
         if( !Auth::check() )
         {
             return redirect()->route('login')
@@ -144,12 +144,12 @@ class MissionController extends Controller
             ])->onlyInput('email');
         }
 
-        $Input = $request->all();
+		$ActiveAction = "mission";
 
         return view('mission.show', compact("ActiveAction"));
     }
 
-    public function edit(Request $request){
+    public function edit(Mission $id){
         if( !Auth::check() )
         {
             return redirect()->route('login')
@@ -158,31 +158,12 @@ class MissionController extends Controller
             ])->onlyInput('email');
         }
 
-        $Input = $request->all();
+		$ActiveAction = "mission";
 
         return view('mission.edit', compact("ActiveAction"));
     }
 
-    public function getMissions(Request $request){
-        if( !Auth::check() )
-        {
-            return redirect()->route('login')
-                ->withErrors([
-                'email' => 'Please login to access the dashboard.',
-            ])->onlyInput('email');
-        }
-		
-        $user = User::find($request->user_id);
-        Log::debug("inside mission controller - " . $user);
-
-		$ActiveAction = "dashboard";
-		$Data = Mission::where("department",$user["department"])->get();
-
-        Log::debug($Data);
-        return json_encode(array("Status" =>  1, "Data" => $Data ,"Message" => "Mission fetched successfully"));
-    }
-
-    public function update(Request $request){
+    public function update(Request $request, Mission $id){
         if( !Auth::check() )
         {
             return redirect()->route('login')
@@ -196,7 +177,7 @@ class MissionController extends Controller
         return json_encode(array("Status" =>  1, "Message" => "Mission Updated Successfully"));
     }
 
-    public function destroy($id)
+    public function destroy(Mission $id)
     {
         if( !Auth::check() )
         {
@@ -206,8 +187,31 @@ class MissionController extends Controller
             ])->onlyInput('email');
         }
 
-        $Input = $request->all();
 
         return json_encode(array("Status" =>  1, "Message" => "Mission Deleted Successfully"));
     }
+
+    public function getMissions(Request $request){
+        try {
+            if( !Auth::check() )
+            {
+                return redirect()->route('login')
+                    ->withErrors([
+                    'email' => 'Please login to access the dashboard.',
+                ])->onlyInput('email');
+            }
+            
+            $user = User::find($request->user_id);
+            Log::debug("inside mission controller - " . $user);
+
+            $Data = Mission::where("department",$user["department"])->get();
+
+            Log::debug($Data);
+            return json_encode(array("Status" =>  1, "Data" => $Data ,"Message" => "Mission fetched successfully"));
+        } catch(Exception $e){
+            Log::error($e);
+            return json_encode(array("Status" =>  0, "Message" => "Mission fetch failed"));
+        }
+    }
+
 }

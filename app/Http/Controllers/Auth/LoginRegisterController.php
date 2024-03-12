@@ -120,7 +120,7 @@ class LoginRegisterController extends Controller
         if(Auth::check())
         {
             $user = Auth::user();
-            return view('auth.dashboard',[
+            return view('dashboard',[
                 'department' => $user->department
             ]);
         }

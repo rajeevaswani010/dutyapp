@@ -52,7 +52,7 @@ class DashboardController extends Controller
         }
 
         Log::debug($Data);
-		return view('auth.dashboard', compact("Data","ActiveAction"));
+		return view('dashboard', compact("Data","ActiveAction"));
     }
 
 	public function dashboardAdmin(){
