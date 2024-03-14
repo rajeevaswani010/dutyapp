@@ -18,6 +18,70 @@
         <div class="row">
             <div class="col-lg-12">
 
+                <!-- filters start  -->
+                <form>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filters</h5>
+                            <div class="row row-align-items-basline">
+                                <div class="col-lg-2">
+                                    <label>{{ __("Mission Id") }}</label>
+                                    <input type="text" class="form-control" id="mission_id" name="mission_id" value="{{ @$_GET['mission_id'] }}">
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>{{ __("Department") }}</label>
+                                    <select class="form-control" name="department" id="filter-department">
+                                        <option value="">{{ __("All") }}</option>
+                                        @foreach ($Departments as $department)
+                                            <option value={{ $department['name'] }}>{{ $department['name'] }}</option>
+                                        @endforeach
+                                        <script>
+                                        @if( isset($_GET['department']) )
+                                            $('#filter-department').val("{{ $_GET['department'] }}");
+                                        @endif
+                                        </script>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>{{ __("Start Date") }}</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ @$_GET['start_date'] }}" onchange="validateDateRange()">
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>{{ __("End Date") }}</label>
+                                    <input type="date" class="form-control" id="end_date" name="end_date" value="{{ @$_GET['end_date'] }}" onchange="validateDateRange()">
+                                </div>
+                                <!-- <div class="col">
+                                    <label>{{ __("Status") }}</label>
+                                    <select class="form-control" name="status" id="status">
+                                        <option value="">{{ __("All") }}</option>
+                                        <option @if(@$_GET['status'] == 1) selected @endif value=1>{{ __("Planned") }}</option>
+                                        <option @if(@$_GET['status'] == 2) selected @endif value=2>{{ __("Active") }}</option>
+                                        <option @if(@$_GET['status'] == 3) selected @endif value=5>{{ __("Cancelled") }}</option>
+                                        <option @if(@$_GET['status'] == 4) selected @endif value=3>{{ __("Finish") }}</option>
+                                    </select>
+                                </div>            -->
+                                <div class="col-1">
+                                    <button class="btn btn-primary float-right" role="button">{{ __("Search") }}</button>
+                                </div>
+                                <div class="col-1">
+                                    <button class="btn btn-primary btn-outline float-right" role="button" onclick="clearFilters();">{{ __("Clear") }}</button>
+                                </div>
+                                <script>
+                                    function clearFilters(){
+                                        event.preventDefault();
+                                        $('#mission_id').val(null);
+                                        $('#filter-department').val('Operations');
+                                        $('#start_date').val(null);
+                                        $('#end_date').val(null);
+                                    }    
+                                </script>
+                        </div>
+                    </div>
+                </div>
+                </form>
+                <!-- filters end -->
+
+                <!-- mission table start -->
                 <div class="card">
                     <div class="card-header card-header-inline">
                         <h5 class="card-title">Missions</h5>
@@ -25,7 +89,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="myTable" class="table table-hover datatable">
+                            <table id="missionTable" class="table table-hover border datatable">
                                 <thead>
                                     <tr>
                                         <th>{{ __("Mission ID") }}</th>
@@ -34,13 +98,15 @@
                                         <th>{{ __("Country") }}</th>
                                         <th>{{ __("Department") }}</th>
                                         <th>{{ __("Directorate") }}</th>
-                                        <th>{{ __("Number of staff") }}</th>
+                                        <th>{{ __("Staff Required") }}</th>
+                                        <th>{{ __("Staff Assigned") }}</th>
                                         <th>{{ __("Number of days") }}</th>
                                         <th>{{ __("Number of nights") }}</th>
                                         <th>{{ __("Start Date") }}</th>
                                         <th>{{ __("End Date") }}</th>
                                         <th>{{ __("Vehicle Required") }}</th>
                                         <th>{{ __("Air Ticket Required") }}</th>
+                                        <th style="position:sticky;"> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,23 +121,38 @@
                                             <td>{{ $DT->department }}</td>
                                             <td>{{ $DT->directorate }}</td>
                                             <td>{{ $DT->num_of_staff }}</td>
+                                            <td>  <!-- staff assigned -->
+                                                {{ count($DT->users) }}
+                                            </td>
                                             <td>{{ $DT->num_of_days }}</td>
                                             <td>{{ $DT->num_of_nights }}</td>
                                             <td>{{ $DT->start_date }}</td>
                                             <td>{{ $DT->end_date }}</td>
                                             <td>{{ $DT->vehicle_required }}</td>
                                             <td>{{ $DT->air_ticket_required }}</td>
+                                            <td class="Action" style="position:sticky;">
+                                                <span>
+                                                    <div class="action-btn ms-2">
+                                                        <a href="{{ URL('mission') }}/{{ $DT->id }}/edit"
+                                                            class="mx-3 btn btn-sm align-items-center"
+                                                            data-url="{{ URL('mission') }}/{{ $DT->id }}/edit"
+                                                            data-ajax-popup="true" data-title="Edit Coupon"
+                                                            data-bs-toggle="tooltip" title="Edit"
+                                                            data-original-title="Edit">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                    </div>
+                                                </span>
+                                            </td>
                                         </tr>
                                     @endforeach
 
                                 </tbody>
                             </table>
                         </div>
-                        <!-- End Table with stripped rows -->
-
                     </div>
+                    <!-- End Table with stripped rows -->
                 </div>
-
             </div>
         </div>
     </section>
@@ -81,7 +162,7 @@
 
 
 <!-- Modal create mission -->
-<div class="modal" id="createMissionModal" tabindex="-1" role="dialog" aria-labelledby="createMissionModal" aria-hidden="true">
+<div class="modal fade" id="createMissionModal" tabindex="-1" role="dialog" aria-labelledby="createMissionModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -190,6 +271,7 @@
     </div>
 </div>
 <script>
+
 $("#createmission").submit(function (event) {
     event.preventDefault();
 

@@ -32,8 +32,7 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/logout', 'logout')->name('logout');
 });
 
-// Route::resource('mission', MissionController::class);
-Route::get('/mission', [MissionController::class, 'index']);
+Route::resource('mission', MissionController::class);
 Route::post('mission/add', [MissionController::class,'add']);
 Route::get('/getMissions', [MissionController::class,'getMissions']);
 
@@ -42,5 +41,9 @@ Route::resource('users', UserController::class);
 Route::post('/assignusertomissions', [UserController::class,'assignUserToMissions']);
 Route::post('/unassign-user-from-missions', [UserController::class,'unAssignUserFromMissions']);
 
+Route::get('/deposit', [App\Http\Controllers\DepositController::class,'deposit'])->name('deposit');
+Route::post('/doDeposit', [App\Http\Controllers\DepositController::class,'doDeposit'])->name('doDeposit');
+
+Route::get('/mark-as-read', [App\Http\Controllers\DepositController::class,'markAsRead'])->name('mark-as-read');
 
 

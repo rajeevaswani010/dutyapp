@@ -30,26 +30,21 @@ class UserController extends Controller
         Log::debug($user);
 
         $ActiveAction = "user";
-		$Data = User::get();
+		// $Data = User::get();
+        $Data = User::with('missions')->get();
 
-        // if($request->start_date != ""){
-        //     $Data = $Data->where("start_date", ">=", $request->start_date." 00:00:00");
-        // }
 
-        // if($request->end_date != ""){
-        //     $Data = $Data->where("end_date", "<=", $request->end_date." 23:59:59");
-        // }
+        if($request->emp_id != ""){
+            $Data = $Data->where("employee_id", $request->emp_id);
+        }
 
-        // if($request->number != ""){
-        //     $Data = $Data->where("id", $request->number);
-        // }
-
-        // if($request->department != ""){
-        //     $Data = $Data->where("department", $request->department);
-        // }
+        if($request->department != ""){
+            $Data = $Data->where("department", $request->department);
+        }
+        $Departments = Department::get();
 
         Log::debug($Data);
-        return view('user.view', compact("Data", "ActiveAction"));
+        return view('user.view', compact("Data","Departments", "ActiveAction"));
     }
 
     public function create(Request $request){
@@ -182,4 +177,27 @@ class UserController extends Controller
             return json_encode(array("Status" =>  0, "Message" => "Mission assignment failed"));
         }
     }
+
+    public function getUsers(Request $request){
+        try {
+            if( !Auth::check() )
+            {
+                return redirect()->route('login')
+                    ->withErrors([
+                    'email' => 'Please login to access the dashboard.',
+                ])->onlyInput('email');
+            }
+            
+            $user = User::find($request->user_id);
+            Log::debug("inside mission controller - " . $user);
+
+            $Data = User::get();
+
+            return json_encode(array("Status" =>  1, "Data" => $Data ,"Message" => "Users fetched successfully"));
+        } catch(Exception $e){
+            Log::error($e);
+            return json_encode(array("Status" =>  0, "Message" => "User fetch failed."));
+        }
+    }
+
 }

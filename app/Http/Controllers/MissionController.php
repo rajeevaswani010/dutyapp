@@ -32,29 +32,30 @@ class MissionController extends Controller
 
 		$ActiveAction = "dashboard";
         if($user["department"] != "Admin"){
-		    $Data = Mission::where("department",$user["department"])->get();
+		    $Data = Mission::with('users')->where("department",$user["department"])->get();
         } else {
-            $Data = Mission::get();
-        }
-
-        if($request->start_date != ""){
-            $Data = $Data->where("start_date", ">=", $request->start_date." 00:00:00");
+            $Data = Mission::with('users')->get();
         }
 
         if($request->end_date != ""){
-            $Data = $Data->where("end_date", "<=", $request->end_date." 23:59:59");
+            $Data = $Data->where("start_date", "<=", $request->end_date." 23:59:59");
+        }
+
+        if($request->start_date != ""){
+            $Data = $Data->where("end_date", ">=", $request->start_date." 00:00:00");
         }
 
         if($request->number != ""){
             $Data = $Data->where("id", $request->number);
         }
 
-        // if($request->department != ""){
-        //     $Data = $Data->where("department", $request->department);
-        // }
+        if($request->mission_id != ""){
+            $Data = $Data->where("id", $request->mission_id);
+        }
 
+        $Departments = Department::get();
         Log::debug($Data);
-		return view('mission.view', compact("Data","ActiveAction"));
+		return view('mission.view', compact("Data","Departments","ActiveAction"));
     }
 
     public function create(){
@@ -144,12 +145,15 @@ class MissionController extends Controller
             ])->onlyInput('email');
         }
 
+        Log.debug($id);
+        // $Data = Mission::with('users')->where("id",$user["department"])->get();
+
 		$ActiveAction = "mission";
 
         return view('mission.show', compact("ActiveAction"));
     }
 
-    public function edit(Mission $id){
+    public function edit($id){
         if( !Auth::check() )
         {
             return redirect()->route('login')
@@ -157,10 +161,12 @@ class MissionController extends Controller
                 'email' => 'Please login to access the dashboard.',
             ])->onlyInput('email');
         }
+        $Data = Mission::with('users')->find($id);
+        Log::debug($Data);
 
 		$ActiveAction = "mission";
 
-        return view('mission.edit', compact("ActiveAction"));
+        return view('mission.edit', compact("Data","ActiveAction"));
     }
 
     public function update(Request $request, Mission $id){

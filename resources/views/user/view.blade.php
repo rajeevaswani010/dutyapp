@@ -15,6 +15,54 @@
     </div><!-- End Page Title -->
 
     <section class="section">
+
+        <div class="row">
+            <!-- filters start  -->
+            <form>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filters</h5>
+                            <div class="row row-align-items-basline">
+                                <div class="col-lg-2">
+                                    <label>{{ __("Employee Id") }}</label>
+                                    <input type="text" class="form-control" id="emp_id" name="emp_id" value="{{ @$_GET['emp_id'] }}">
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>{{ __("Department") }}</label>
+                                    <select class="form-control" name="department" id="filter-department">
+                                        <option value="">{{ __("All") }}</option>
+                                        @foreach ($Departments as $department)
+                                            <option value={{ $department['name'] }}>{{ $department['name'] }}</option>
+                                        @endforeach
+                                        <script>
+                                        @if( isset($_GET['department']) )
+                                            $('#filter-department').val("{{ $_GET['department'] }}");
+                                        @endif
+                                        </script>
+                                    </select>
+                                </div>
+                                <div class="col-1">
+                                    <button class="btn btn-primary float-right" role="button">{{ __("Search") }}</button>
+                                </div>
+                                <div class="col-1">
+                                    <button class="btn btn-primary btn-outline float-right" role="button" onclick="clearFilters();">{{ __("Clear") }}</button>
+                                </div>
+                                <script>
+                                    function clearFilters(){
+                                        event.preventDefault();
+                                        $('#mission_id').val(null);
+                                        $('#filter-department').val('Operations');
+                                        $('#start_date').val(null);
+                                        $('#end_date').val(null);
+                                    }    
+                                </script>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- filters end -->
+        </div>
+
         <div class="row">
             <div class="col-lg-12">
 
@@ -26,20 +74,22 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="myTable" class="table table-hover datatable">
+                            <table id="userTable" class="table table-hover datatable">
                                 <thead>
                                     <tr>
                                         <th>{{ __("Username") }}</th>
                                         <th>{{ __("Employee Id") }}</th>
                                         <th>{{ __("Designation") }}</th>
                                         <th>{{ __("Department") }}</th>
-                                        <th>{{ __("Gender") }}</th>
+                                        <!-- <th>{{ __("Gender") }}</th>
                                         <th>{{ __("Phone") }}</th>
                                         <th>{{ __("Email") }}</th>
                                         <th>{{ __("Address") }}</th>
                                         <th>{{ __("Date of Birth") }}</th>
                                         <th>{{ __("Date of Joining") }}</th>
-                                        <th>{{ __("Active") }}</th>
+                                        <th>{{ __("Active") }}</th> -->
+                                        <th>{{ __("Finished Missions") }}</th>
+                                        <th>{{ __("Num of upcoming Missions") }}</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -52,13 +102,15 @@
                                             <td>{{ $DT->employee_id }}</td>
                                             <td>{{ $DT->designation }}</td>
                                             <td>{{ $DT->department }}</td>
-                                            <td>{{ $DT->gender }}</td>
+                                            <!-- <td>{{ $DT->gender }}</td>
                                             <td>{{ $DT->phone }}</td>
                                             <td>{{ $DT->email }}</td>
                                             <td>{{ $DT->address }}</td>
                                             <td>{{ $DT->dob }}</td>
                                             <td>{{ $DT->doj }}</td>
-                                            <td>{{ $DT->is_active }}</td>
+                                            <td>{{ $DT->is_active }}</td> -->
+                                            <td>{{ count($DT->missions) }}</td>
+                                            <td>{{ count($DT->missions) }}</td>
                                             <td>
                                                 <button type="button" title="Assign Missions"
                                                     class="btn btn-primary btn-sm" data-bs-toggle="modal"
@@ -103,11 +155,14 @@
     </div>
 </div>
 <script>
+   
     function onAssignMission(user_id){
         var user_id = event.target.dataset.id;
         var missionSelected = {};
 
         $("#assignMissionModal").css("display", "block");
+        $('#assignMissionModal .modal-body').html("");
+
         var panel = $('<div class="panel panel-default">');
         var panelHeader = $('<div class="panel-header">');
         panelHeader.html("<h3>Select Mission</h3>");
@@ -116,8 +171,11 @@
         var missionList = $('<div>');
         missionList.html("Loading data...");
         panelBody.append(missionList);
+        var panelFooter = $('<div class="panel-footer">');
+
         panel.append(panelHeader);
         panel.append(panelBody);
+        panel.append(panelFooter);
 
         // Append panel to modal body
         $('#assignMissionModal .modal-body').append(panel);
@@ -138,7 +196,9 @@
 
                 // Create a table header row
                 var headerRow = $('<thead>');
-                
+
+                headerRow.append('<th> </th>');
+
                 // Add table headers
                 for (var key in tableData[0]) {
                     headerRow.append('<th>'+key.toUpperCase()+'</th>');
@@ -151,7 +211,7 @@
 
                     var checkboxCell = $('<td>');
                     var checkbox = $('<input type="checkbox">');
-                    checkbox.attr('arg',item.id);
+                    checkbox.attr('data-arg',item.id);
                     checkbox.addClass('formcheckinput');
                     checkboxCell.append(checkbox);
 
@@ -165,9 +225,10 @@
                     // }); 
 
                     checkbox.on('change', function (event) {
-                        event.stopPropagation();
+                        event.stopPropagation(); // Stop event propagation
 
                         var id = event.target.dataset.arg;
+                        console.log(id);
                         if (event.target.checked) {
                             missionSelected[id] = 1;
                         } else {
@@ -181,9 +242,11 @@
                     tbody.append(row);
                 });
                 table.append(tbody);
-                var newDiv = $('<div class="tableresponsive">');
+                var newDiv = $('<div class="tableresponsive" style="overflow-x:auto;">');
                 newDiv.append(table);
                 missionList.append(newDiv);
+
+                let table2 = new DataTable('#missionTable');
             },
 
             failure: function (errmsg) {
@@ -213,10 +276,16 @@
             }
         });
 
-        $("#assignMissions").click(function (event) {
+        var btnClose = $('<button class="btn btn-danger" data-bs-dismiss="modal">close</button>');
+        panelFooter.append(btnClose);
+
+        var btnSubmit = $('<button class="btn btn-primary">Submit</button>');
+        panelFooter.append(btnSubmit);
+        btnSubmit.on('click',function(event){
             event.preventDefault();
 
             console.log("inside assign missions");
+            console.log(missionSelected)
             var missions = [];
             for (var key in missionSelected) {
                 if (missionSelected.hasOwnProperty(key)) {
@@ -251,7 +320,6 @@
             });
 
         });
-
     }
 
 
