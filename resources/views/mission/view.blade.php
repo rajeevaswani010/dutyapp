@@ -89,7 +89,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="missionTable" class="table table-hover border datatable">
+                            <table id="missionTable" class="table table-hover datatable dataTable-table">
                                 <thead>
                                     <tr>
                                         <th>{{ __("Mission ID") }}</th>
@@ -133,9 +133,9 @@
                                             <td class="Action" style="position:sticky;">
                                                 <span>
                                                     <div class="action-btn ms-2">
-                                                        <a href="{{ URL('mission') }}/{{ $DT->id }}/edit"
+                                                        <a href="{{ URL('mission') }}/{{ $DT->id }}"
                                                             class="mx-3 btn btn-sm align-items-center"
-                                                            data-url="{{ URL('mission') }}/{{ $DT->id }}/edit"
+                                                            data-url="{{ URL('mission') }}/{{ $DT->id }}"
                                                             data-ajax-popup="true" data-title="Edit Coupon"
                                                             data-bs-toggle="tooltip" title="Edit"
                                                             data-original-title="Edit">
@@ -166,8 +166,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createMissonModal">{{ __("Create New Mission") }}</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <h3 class="modal-title" id="createMissonModal">{{ __("Create New Mission") }}</h3>
+                <button class="btn btn-danger btn-sm float-right" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -183,7 +183,12 @@
 
                             <div class="form-group col-md-6">
                                 <label for="country" class="col-form-label text-dark">{{ __("Country") }}</label>
-                                <input class="form-control font-style" name="country" type="text" id="country" required />
+                                <select class="form-control" name="country" id="country">
+                                        <option value="">{{ __("--Select Country--") }}</option>
+                                        @foreach ($Countries as $country)
+                                            <option value={{ $country['name'] }}>{{ $country['name'] }}</option>
+                                        @endforeach
+                                </select>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="city" class="col-form-label text-dark">{{ __("City") }}</label>
@@ -228,7 +233,12 @@
                             </div> -->
                             <div class="form-group col-md-8">
                                 <label for="department" class="col-form-label text-dark">{{ __("Department") }}</label>
-                                <input class="form-control font-style" name="department" type="text" id="department" required/>
+                                <select class="form-control" name="department" id="department">
+                                        <option value="">{{ __("--Select Department--") }}</option>
+                                        @foreach ($Departments as $department)
+                                            <option value={{ $department['name'] }}>{{ $department['name'] }}</option>
+                                        @endforeach
+                                </select>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="directorate" class="col-form-label text-dark">{{ __("Directorate") }}</label>

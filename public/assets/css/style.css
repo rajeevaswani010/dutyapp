@@ -1271,6 +1271,12 @@ h6 {
   align-items: end;
 }
 
+.modal-title,
+.card-title {
+  flex:1;
+}
+
 .float-right{
   float:right;
 }
+

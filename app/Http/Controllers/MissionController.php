@@ -10,6 +10,7 @@ use Session;
 use App\Models\Mission;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Country;
 use App\Models\Employee;
 
 use Log;
@@ -54,8 +55,9 @@ class MissionController extends Controller
         }
 
         $Departments = Department::get();
+        $Countries = Country::get();
         Log::debug($Data);
-		return view('mission.view', compact("Data","Departments","ActiveAction"));
+		return view('mission.view', compact("Data","Departments","Countries","ActiveAction"));
     }
 
     public function create(){
@@ -136,7 +138,7 @@ class MissionController extends Controller
         }
     }
 
-    public function show(Mission $id){
+    public function show($id){
         if( !Auth::check() )
         {
             return redirect()->route('login')
@@ -144,13 +146,13 @@ class MissionController extends Controller
                 'email' => 'Please login to access the dashboard.',
             ])->onlyInput('email');
         }
-
-        Log.debug($id);
+        $Data = Mission::with('users')->find($id);
+        Log::debug($id);
         // $Data = Mission::with('users')->where("id",$user["department"])->get();
 
 		$ActiveAction = "mission";
 
-        return view('mission.show', compact("ActiveAction"));
+        return view('mission.edit', compact("Data","ActiveAction"));
     }
 
     public function edit($id){
@@ -169,7 +171,7 @@ class MissionController extends Controller
         return view('mission.edit', compact("Data","ActiveAction"));
     }
 
-    public function update(Request $request, Mission $id){
+    public function update(Request $request, $id){
         if( !Auth::check() )
         {
             return redirect()->route('login')

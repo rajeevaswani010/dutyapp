@@ -81,15 +81,15 @@
                                         <th>{{ __("Employee Id") }}</th>
                                         <th>{{ __("Designation") }}</th>
                                         <th>{{ __("Department") }}</th>
-                                        <!-- <th>{{ __("Gender") }}</th>
+                                        <!-- <th>{{ __("Gender") }}</th> -->
                                         <th>{{ __("Phone") }}</th>
                                         <th>{{ __("Email") }}</th>
-                                        <th>{{ __("Address") }}</th>
-                                        <th>{{ __("Date of Birth") }}</th>
-                                        <th>{{ __("Date of Joining") }}</th>
-                                        <th>{{ __("Active") }}</th> -->
-                                        <th>{{ __("Finished Missions") }}</th>
-                                        <th>{{ __("Num of upcoming Missions") }}</th>
+                                        <!-- <th>{{ __("Address") }}</th> -->
+                                        <!-- <th>{{ __("Date of Birth") }}</th> -->
+                                        <!-- <th>{{ __("Date of Joining") }}</th> -->
+                                        <!-- <th>{{ __("Active") }}</th> -->
+                                        <th>{{ __("Assigned Missions") }}</th>
+                                        <!-- <th>{{ __("Num of upcoming Missions") }}</th> -->
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -102,15 +102,15 @@
                                             <td>{{ $DT->employee_id }}</td>
                                             <td>{{ $DT->designation }}</td>
                                             <td>{{ $DT->department }}</td>
-                                            <!-- <td>{{ $DT->gender }}</td>
+                                            <!-- <td>{{ $DT->gender }}</td> -->
                                             <td>{{ $DT->phone }}</td>
                                             <td>{{ $DT->email }}</td>
-                                            <td>{{ $DT->address }}</td>
-                                            <td>{{ $DT->dob }}</td>
-                                            <td>{{ $DT->doj }}</td>
-                                            <td>{{ $DT->is_active }}</td> -->
+                                            <!-- <td>{{ $DT->address }}</td> -->
+                                            <!-- <td>{{ $DT->dob }}</td> -->
+                                            <!-- <td>{{ $DT->doj }}</td> -->
+                                            <!-- <td>{{ $DT->is_active }}</td> -->
                                             <td>{{ count($DT->missions) }}</td>
-                                            <td>{{ count($DT->missions) }}</td>
+                                            <!-- <td>{{ count($DT->missions) }}</td> -->
                                             <td>
                                                 <button type="button" title="Assign Missions"
                                                     class="btn btn-primary btn-sm" data-bs-toggle="modal"

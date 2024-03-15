@@ -39,7 +39,9 @@ Route::get('/getMissions', [MissionController::class,'getMissions']);
 
 Route::resource('users', UserController::class);
 Route::post('/assignusertomissions', [UserController::class,'assignUserToMissions']);
-Route::post('/unassign-user-from-missions', [UserController::class,'unAssignUserFromMissions']);
+Route::post('/unassignuserfrommissions', [UserController::class,'unAssignUserFromMissions']);
+Route::get('/getUsers', [UserController::class,'getUsers']);
+
 
 Route::get('/deposit', [App\Http\Controllers\DepositController::class,'deposit'])->name('deposit');
 Route::post('/doDeposit', [App\Http\Controllers\DepositController::class,'doDeposit'])->name('doDeposit');

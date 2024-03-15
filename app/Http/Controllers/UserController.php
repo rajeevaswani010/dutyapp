@@ -148,7 +148,8 @@ class UserController extends Controller
             Log::info($request);
 
             $userObj = User::find($request->user_id);
-            $userObj->missions()->attach($request->missions);
+            // $userObj->missions()->attach($request->missions);
+            $userObj->missions()->syncWithoutDetaching($request->missions);
             return json_encode(array("Status" =>  1, "Message" => "Mission assignment success"));
         } catch(Exception $e){
             Log::error($e);
@@ -170,11 +171,11 @@ class UserController extends Controller
 
             $userObj = User::find($request->user_id);
 
-            $userObj->missions()->sync($missions);
-            return json_encode(array("Status" =>  1, "Message" => "Mission assignment success"));
+            $userObj->missions()->detach($request->missions);
+            return json_encode(array("Status" =>  1, "Message" => "Mission detachment success"));
         } catch(Exception $e){
             Log::error($e);
-            return json_encode(array("Status" =>  0, "Message" => "Mission assignment failed"));
+            return json_encode(array("Status" =>  0, "Message" => "Mission detach failed"));
         }
     }
 
@@ -188,10 +189,10 @@ class UserController extends Controller
                 ])->onlyInput('email');
             }
             
-            $user = User::find($request->user_id);
-            Log::debug("inside mission controller - " . $user);
+            $mission = Mission::find($request->mission_id);
+            Log::debug("inside user controller - " . $mission);
 
-            $Data = User::get();
+            $Data = User::where("department",$mission["department"])->get();
 
             return json_encode(array("Status" =>  1, "Data" => $Data ,"Message" => "Users fetched successfully"));
         } catch(Exception $e){
