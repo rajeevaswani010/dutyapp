@@ -40,6 +40,11 @@
     <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
     <script src="{{ asset('assets/vendor/toastr/toastr.min.js') }}"></script>
 
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-messaging.js"></script>
+    
+    
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <script>
@@ -60,6 +65,7 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
+
     </script>
 
 </head>
@@ -256,6 +262,10 @@
       </ul>
     </nav><!-- End Icons Navigation -->
 
+    <script>
+
+    </script>
+
   </header><!-- End Header -->
 
 
@@ -298,6 +308,44 @@
     
   <!-- Template Main JS File -->
   <script src="{{ asset('assets/js/main.js') }}"></script>
+  <script>
+        var firebaseConfig = {
+          apiKey: "YOUR_API_KEY",
+          authDomain: "YOUR_AUTH_DOMAIN",
+          projectId: "YOUR_PROJECT_ID",
+          storageBucket: "YOUR_STORAGE_BUCKET",
+          messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+          appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        console.log("requesting permission..");
+        
+        messaging.requestPermission()
+          .then(function() {
+            console.log("Notification permission granted.");
+            // Get registration token. Initially this makes a network call, once retrieved
+            // subsequent calls to getToken will return from cache.
+            return messaging.getToken();
+          })
+          .then(function(token) {
+            console.log("FCM token:", token);
+            // Send the token to your server to associate it with a user
+          })
+          .catch(function(err) {
+            console.log("Unable to get permission to notify.", err);
+          });
+          console.log("got permission..");
+
+
+          messaging.onMessage(function(payload) {
+            console.log("Message received. ", payload);
+            // Handle the received message
+          });
+
+  </script>
   
 </body>
 </html>

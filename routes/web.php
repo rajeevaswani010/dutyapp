@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MissionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PushNotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,5 +48,7 @@ Route::get('/deposit', [App\Http\Controllers\DepositController::class,'deposit']
 Route::post('/doDeposit', [App\Http\Controllers\DepositController::class,'doDeposit'])->name('doDeposit');
 
 Route::get('/mark-as-read', [App\Http\Controllers\DepositController::class,'markAsRead'])->name('mark-as-read');
+
+Route::get('/send-notification', [PushNotificationController::class, 'sendPushNotification']);
 
 

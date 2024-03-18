@@ -73,7 +73,7 @@ class MissionController extends Controller
 
 
         $ActiveAction = "Mission";
-        return view('mission.add', compact("ActiveAction"));
+        return view('Mission.add', compact("ActiveAction"));
     }
 
     public function store(Request $request){
@@ -152,7 +152,7 @@ class MissionController extends Controller
 
 		$ActiveAction = "mission";
 
-        return view('mission.show', compact("Data","ActiveAction"));
+        return view('mission.edit', compact("Data","ActiveAction"));
     }
 
     public function edit($id){

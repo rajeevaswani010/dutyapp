@@ -1,6 +1,15 @@
 @extends('layouts')
 
 @section('content')
+<style>
+    /* .slider-modal .modal-content{
+        height: 100vh !important;
+        width: 50% !important;
+        position: fixed;
+        top: 0;
+        left: 50%;    
+    } */
+</style>
 
 <main id="main" class="main">
 
@@ -133,9 +142,9 @@
                                             <td class="Action" style="position:sticky;">
                                                 <span>
                                                     <div class="action-btn ms-2">
-                                                        <a href="{{ URL('mission') }}/{{ $DT->id }}"
+                                                        <a href="{{ URL('mission') }}/{{ $DT->id }}/edit"
                                                             class="mx-3 btn btn-sm align-items-center"
-                                                            data-url="{{ URL('mission') }}/{{ $DT->id }}"
+                                                            data-url="{{ URL('mission') }}/{{ $DT->id }}/"
                                                             data-ajax-popup="true" data-title="Edit Coupon"
                                                             data-bs-toggle="tooltip" title="Edit"
                                                             data-original-title="Edit">
@@ -156,6 +165,10 @@
             </div>
         </div>
     </section>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#content">
+        Open Slider Modal
+    </button>
 
 </main><!-- End #main -->
 
@@ -281,54 +294,84 @@
     </div>
 </div>
 <script>
+    $("#createmission").submit(function (event) {
+        event.preventDefault();
 
-$("#createmission").submit(function (event) {
-    event.preventDefault();
+        var formData = {
+            purpose: $("#createmission #purpose").val(),
+            country:$("#createmission #country").val(),
+            city:$("#createmission #city").val(),
+            num_of_staff: $("#createmission #num_of_staff").val(),
+            num_of_days: $("#createmission #num_of_days").val(),
+            num_of_nights:$("#createmission #num_of_nights").val(),
+            section:$("#createmission #section").val(),
+            department:$("#createmission #department").val(),
+            directorate:$("#createmission #directorate").val(),
+            travelling_area_from: $("#createmission #travelling_area_from").val(),
+            start_date:$("#createmission #start_date").val(),
+            end_date:$("#createmission #end_date").val(),
+            travel_start_date:$("#createmission #travel_start_date").val(),
+            travel_return_date:$("#createmission #travel_return_date").val(),
+            remarks:$("#createmission #remarks").val(),
+            air_ticket_required:$("#createmission #air_ticket_required").is(":checked"),
+            vehicle_required:$("#createmission #vehicle_required").is(":checked")
+        };
 
-    var formData = {
-        purpose: $("#createmission #purpose").val(),
-        country:$("#createmission #country").val(),
-        city:$("#createmission #city").val(),
-        num_of_staff: $("#createmission #num_of_staff").val(),
-        num_of_days: $("#createmission #num_of_days").val(),
-        num_of_nights:$("#createmission #num_of_nights").val(),
-        section:$("#createmission #section").val(),
-        department:$("#createmission #department").val(),
-        directorate:$("#createmission #directorate").val(),
-        travelling_area_from: $("#createmission #travelling_area_from").val(),
-        start_date:$("#createmission #start_date").val(),
-        end_date:$("#createmission #end_date").val(),
-        travel_start_date:$("#createmission #travel_start_date").val(),
-        travel_return_date:$("#createmission #travel_return_date").val(),
-        remarks:$("#createmission #remarks").val(),
-        air_ticket_required:$("#createmission #air_ticket_required").is(":checked"),
-        vehicle_required:$("#createmission #vehicle_required").is(":checked")
-    };
-
-    // showloading();
-    $.ajax({
-        url: "{{ URL('mission/add') }}",
-        method: "POST",
-        headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-        data: formData,
-        dataType: "json",
-        encode: true,
-        success: function( data, textStatus, jqXHR ) {
-            // hideloading();
-            $('#createMissionModal').modal("hide");
-            alert("mission successfully added");
-            window.location.reload();
-        },
-        error: function( jqXHR, textStatus, errorThrown ) {
-            // hideloading();
-            alert("error");
-        }
-    })
-});
+        // showloading();
+        $.ajax({
+            url: "{{ URL('mission/add') }}",
+            method: "POST",
+            headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+            data: formData,
+            dataType: "json",
+            encode: true,
+            success: function( data, textStatus, jqXHR ) {
+                // hideloading();
+                $('#createMissionModal').modal("hide");
+                alert("mission successfully added");
+                window.location.reload();
+            },
+            error: function( jqXHR, textStatus, errorThrown ) {
+                // hideloading();
+                alert("error");
+            }
+        })
+    });
 </script>
 
 <!-- modal create mission END -->
 
+<!-- The slider modal -->
+<div class="modal fade slider-modal" id="content" tabindex="-1" aria-labelledby="sliderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sliderModalLabel">Slider Modal</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="range" min="0" max="100" value="50" class="custom-range" id="sliderInput">
+        <p>Selected Value: <span id="sliderValue">50</span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Update the slider value when it's changed
+  var slider = document.getElementById("sliderInput");
+  var output = document.getElementById("sliderValue");
+  output.innerHTML = slider.value; // Display the default slider value
+
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+  }
+</script>
 @endsection

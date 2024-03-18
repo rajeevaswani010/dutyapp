@@ -16,4 +16,9 @@ class Mission extends Model
     public function users(){
         return $this->belongsToMany(User::class, 'mission_users', 'mission_id', 'user_id');
     }    
+
+    public function departments(){
+        return $this->belongsToMany(Department::class, 'mission_department', 'mission_id', 'department_id');
+    }    
+
 }
