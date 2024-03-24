@@ -75,6 +75,10 @@
                                 <div class="col-1">
                                     <button class="btn btn-primary btn-outline float-right" role="button" onclick="clearFilters();">{{ __("Clear") }}</button>
                                 </div>
+                                <div class="col-1">
+                                    <div class="col"><button class="btn btn-primary float-lg-right" style="float:right;" role="button" name="export" value="Export">{{ __("Export") }}</button></div>
+                                </div>
+                                
                                 <script>
                                     function clearFilters(){
                                         event.preventDefault();

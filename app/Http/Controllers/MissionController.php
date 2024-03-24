@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Session;
 
+use App\Export\MissionExport;
 use App\Models\Mission;
 use App\Models\User;
 use App\Models\Department;
@@ -15,6 +16,7 @@ use App\Models\Employee;
 
 use Log;
 use DB;
+use Excel;
 
 class MissionController extends Controller
 {
@@ -52,6 +54,10 @@ class MissionController extends Controller
 
         if($request->mission_id != ""){
             $Data = $Data->where("id", $request->mission_id);
+        }
+
+        if(isset($request->export) && $request->export == "Export"){
+            return Excel::download(new MissionExport($Data), 'Mission.xlsx');
         }
 
         $Departments = Department::get();
