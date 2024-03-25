@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Department;
 use App\Models\Country;
 use App\Models\Employee;
+use App\Http\Classes\Status;
 
 use Log;
 use DB;

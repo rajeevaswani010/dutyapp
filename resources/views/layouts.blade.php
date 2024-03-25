@@ -68,7 +68,7 @@
 </head>
 <body>
 
-
+<div class="container-fluid">
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -331,7 +331,7 @@
   <div class="container-fluid">
         @yield('content')        
   </div>
-
+</div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     
   <!-- Template Main JS File -->

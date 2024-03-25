@@ -54,6 +54,6 @@ class User extends Authenticatable
     ];
 
     public function missions(){
-        return $this->belongsToMany(Mission::class, 'mission_users', 'user_id', 'mission_id');
+        return $this->belongsToMany(Mission::class, 'mission_users', 'user_id', 'mission_id')->withPivot('start_date','end_date','allowance','allowance_percent');
     }
 }

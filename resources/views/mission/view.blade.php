@@ -23,6 +23,7 @@ input.hidestep::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 </style>
 
 <main id="main" class="main">
@@ -116,7 +117,7 @@ input.hidestep::-webkit-inner-spin-button {
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="missionTable" class="display pt-3 pb-3">
+                            <table id="missionTable" class="display pt-3 pb-3 stripe row-border order-column">
                                 <thead>
                                     <tr>
                                         <th>{{ __("Mission ID") }}</th>
@@ -125,39 +126,66 @@ input.hidestep::-webkit-inner-spin-button {
                                         <th>{{ __("Country") }}</th>
                                         <th>{{ __("Department") }}</th>
                                         <th>{{ __("Directorate") }}</th>
+                                        <th>{{ __("Status") }}</th>
                                         <th>{{ __("Staff Required") }}</th>
                                         <th>{{ __("Staff Assigned") }}</th>
                                         <th>{{ __("Number of days") }}</th>
-                                        <th>{{ __("Status") }}</th>
                                         <th>{{ __("Start Date") }}</th>
                                         <th>{{ __("End Date") }}</th>
                                         <th>{{ __("Vehicle Required") }}</th>
                                         <th>{{ __("Air Ticket Required") }}</th>
-                                        <th> Action </th>
+                                        <th>{{ __("Created at") }}</th>
+                                        <th>{{ __("Created by") }}</th>
+                                        <th class="sticky-column-end" style="left:0;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     @foreach($Data as $DT)
 
-                                        <tr class="font-style">
-                                            <td>{{ $DT->id }}</td>
+                                        <tr id="{{ $DT->id }}"class="font-style">
+                                            <td >{{ $DT->id }}</td>
                                             <td>{{ $DT->purpose }}</td>
                                             <td>{{ $DT->country }}</td>
                                             <td>{{ $DT->city }}</td>
                                             <td>{{ $DT->department }}</td>
                                             <td>{{ $DT->directorate }}</td>
+                                            <td>
+                                                @if($DT->status == 1)
+                                                    <span
+                                                        class="indicator-line rounded bg-secondary status planned">{{ __("Planned") }}</span>
+                                                @elseif($DT->status == 2)
+                                                    <span
+                                                        class="indicator-line rounded bg-yellow status working">{{ __("Working") }}</span>
+                                                @elseif($DT->status == 3)
+                                                    <span
+                                                        class="indicator-line rounded bg-warning status assigned">{{ __("Assigned") }}</span>
+                                                @elseif($DT->status == 4)
+                                                    <span
+                                                        class="indicator-line rounded bg-success  status approved">{{ __("Approved") }}</span>
+                                                @elseif($DT->status == 5)
+                                                    <span
+                                                        class="indicator-line rounded bg-primary status active">{{ __("Active") }}</span>
+                                                @elseif($DT->status == 6)
+                                                    <span
+                                                        class="indicator-line rounded bg-info status complete">{{ __("Complete") }}</span>
+                                                @elseif($DT->status == 0)
+                                                    <span
+                                                        class="indicator-line rounded bg-danger status cancelled">{{ __("Cancelled") }}</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $DT->num_of_staff }}</td>
                                             <td>  <!-- staff assigned -->
                                                 {{ count($DT->users) }}
                                             </td>
-                                            <td>{{ $DT->num_of_days }}</td>
-                                            <td>{{ $DT->status }}</td>
+                                            <td>{{ $DT->num_of_days }}</td>                                            
                                             <td>{{ $DT->start_date }}</td>
                                             <td>{{ $DT->end_date }}</td>
                                             <td>{{ $DT->vehicle_required }}</td>
                                             <td>{{ $DT->air_ticket_required }}</td>
-                                            <td class="Action" style="position:sticky;">
+                                            <td>{{ $DT->created_at }}</td>
+                                            <td >{{ $DT->created_by }}</td>
+                                            <td class="Action sticky-column-end">
                                                 <span>
                                                     <div class="action-btn ms-2">
                                                         <a href="{{ URL('mission') }}/{{ $DT->id }}/edit"
@@ -335,8 +363,14 @@ input.hidestep::-webkit-inner-spin-button {
 // fix columns.. lke sticky But NOT Working.. 
     $(document).ready(function(){
         var datatable = new DataTable('#missionTable',{
+            columnDefs: [{ width: 200, targets: 0 }],
+            scrollCollapse: true,
+            scrollX: true,
+            scrollY: 600,
+            fixedColumns: true,
             fixedColumns: {
-                end: 1
+                start:1,
+                end:1
             }
         });
     });

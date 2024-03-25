@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Classes\Status;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Session;
@@ -130,7 +131,7 @@ class MissionController extends Controller
             $MissionObj->fees = $request->fees;
             $MissionObj->remarks = $request->remarks;
 
-            $MissionObj->status = 0;
+            $MissionObj->status = Status::PLANNED;
 
             $MissionObj->save();
 

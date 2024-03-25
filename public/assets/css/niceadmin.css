@@ -1289,3 +1289,56 @@ h6 {
     padding: 5px 10px 5px 10px;
 }
 
+.bg-yellow{
+  background-color: #e7e730;
+}
+
+.bg-primary-outline{
+  border: solid thin var(--bg-primary);
+}
+
+.status {
+  padding: 4px 6px 4px 6px;
+  font-size: small;
+  font-weight: bold;
+}
+
+.status.planned,
+.status.active,
+.status.cancelled,
+.status.approved {
+  color:white;
+}
+
+.booking-error {
+  background: #ffc4c4;
+}
+
+/* Ensure that the datatable table scrolls and looks formatted */
+th, td { 
+  white-space: nowrap; 
+}
+div.dataTables_wrapper {
+  margin: 0 auto;
+}
+
+.dt-type-numeric {
+  text-align: center !important;
+}
+
+/* css for sticky columns in datatable */
+.sticky-column-start {
+  position: sticky !important;
+  left: 0; /* Adjust this value for the position */
+  background-color: #f2f2f2; /* Optional: Change background color */
+  z-index:100000;
+}
+
+.sticky-column-end {
+  position: sticky !important;
+  right: 0; /* Adjust this value for the position */
+  background-color: #f2f2f2; /* Optional: Change background color */
+  z-index:100000;
+}
+
+ 

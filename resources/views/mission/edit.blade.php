@@ -40,7 +40,7 @@
                     <div class="col-lg-8">
                         <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title p-0">INFORMATION</h5>
+                            <h5 class="card-title p-0">Information</h5>
                             <button type="button" title="Edit Mission"
                                 class="btn btn-primary btn-sm float-right" data-bs-toggle="modal"
                                 data-bs-target="#editMissionModal" 
@@ -205,6 +205,8 @@
                                             <th>{{ __("Designation") }}</th>
                                             <th>{{ __("Phone") }}</th>
                                             <th>{{ __("Email") }}</th>
+                                            <th>{{ __("Allowance Percentage") }}</th>
+                                            <th>{{ __("Total Allowance") }}</th>
                                             <th> Action </th>
                                         </tr>
                                     </thead>
@@ -217,7 +219,13 @@
                                                 <td>{{ $user->designation }}</td>
                                                 <td>{{ $user->phone }}</td>
                                                 <td>{{ $user->email }}</td>
+                                                <td>{{ $user->pivot->allowance_percent }}</td>
+                                                <td>{{ $user->pivot->allowance }}</td>
                                                 <td> 
+                                                    <button type="button" title="Edit User"
+                                                        class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                                        data-bs-target="#editMissionUserModal" 
+                                                        data-id="{{ $Data->id }}">Edit</button>
                                                     <button onclick="unAssignMission()" data-arg="{{ $user->id }}"
                                                         class="btn btn-primary btn-sm">Remove</button>
                                                 </td>
@@ -467,7 +475,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title" id="editMissionDurationAndResource">{{ __("Edit Mission Dates / Staff") }}</h3>
+                            <h3 class="card-title">{{ __("Edit Mission Dates / Staff") }}</h3>
                             <button class="btn btn-danger btn-sm window-close-btn" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -485,6 +493,14 @@
                                                 step="1" />
                                         </div>
 
+                                        <div class="form-group col-lg-6 mb-3">
+                                            <label for="num_of_days"
+                                                class="col-form-label text-dark mb-1">{{ __("Number of Days") }}</label>
+                                            <input class="form-control font-style" name="num_of_days" type="number"
+                                                id="num_of_days" value="{{ $Data->num_of_days }}" required min="0"
+                                                step="1" />
+                                        </div>
+
                                         <div class="row">
                                             <div class="form-group col-lg-6  mb-3">
                                                 <label for="start_date"
@@ -497,10 +513,18 @@
                                                 <label for="start_date"
                                                     class="col-form-label text-dark mb-1">{{ __("End Date") }}</label>
                                                 <input class="form-control hidestep text-end font-style" name="end_date"
-                                                    type="date" id="end_date" value="{{ $Data->end_date }}" required
+                                                    type="date" id="end_date" value="{{ $Data->end_date }}" disabled
                                                     />
                                             </div>
                                         </div>
+                                        <script>
+                                            $('#num_of_days').on('input', function(){
+                                                var val = $(this).val();
+                                                var currentDate = new Date($Data->start_date); // Get current date
+                                                var futureDate = new Date(currentDate.getTime() + (n * 24 * 60 * 60 * 1000)); // Add n days
+                                                // $('#end_date').val
+                                            });
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -539,6 +563,52 @@
                     console.error(xhr.responseText);
                     alert("mission update failed")
                 }
+        });
+    });
+</script>
+
+<!-- editMissionUser Modal - start -->
+<div class="modal fade" id="editMissionUserModal" tabindex="-1" role="dialog" aria-labelledby="editMissionUserModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ __("Edit User") }}</h3>
+                            <button class="btn btn-danger btn-sm window-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                {!! Form::open(['id' => 'editMissionUser']) !!}
+                                        <div class="row form-content">
+
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div style="float:right;">
+                                    <button type="button" class="btn btn-danger" style="margin-right: 2rem;" data-bs-dismiss="modal">{{ __("Close") }}</button>
+                                    <input class="btn btn-xs btn-primary" type="submit" value='{{ __("Send") }}'>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        {!! Form::close() !!}
+        </div>
+    </div>
+</div>
+<script>
+    $("#editMissionUser").submit(function (event) {
+        var formData = $(this).serialize();
+
+        // console.log(formData);
+        $.ajax({
+            //todo
         });
     });
 </script>
@@ -768,7 +838,6 @@
         });
             
     }
-
 
 </script>
 

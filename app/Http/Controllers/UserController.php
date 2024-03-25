@@ -11,6 +11,7 @@ use App\Models\Mission;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\User;
+use App\Models\GradeAllowance;
 
 use Log;
 use DB;
@@ -148,8 +149,22 @@ class UserController extends Controller
             Log::info($request);
 
             $userObj = User::find($request->user_id);
-            // $userObj->missions()->attach($request->missions);
-            $userObj->missions()->syncWithoutDetaching($request->missions);
+            // $userObj->missions()->syncWithoutDetaching($request->missions);
+
+            foreach($request->missions as $missionId){
+                $mission = Mission::find($missionId);
+                $userobjGrade = Employee::select("grade")->where("employee_id",$userObj->employee_id)->first();
+                Log::debug("user grade - ".$userobjGrade);
+                $allowance = GradeAllowance::select("allowance")->where("grade",$userobjGrade["grade"])->first();
+                Log::debug("user allowance - ".$allowance);
+                $total_allowance = $allowance["allowance"] * $mission->num_of_days * $mission->allowance_percentage/100;
+                $userObj->missions()->attach($missionId,['allowance_percent' => $mission->allowance_percentage, 'allowance' => $total_allowance]);
+
+                foreach ($mission->users as $user) {
+                    Log::debug("user allowance - ".$user->pivot->allowance);
+                }
+            }
+
             return json_encode(array("Status" =>  1, "Message" => "Mission assignment success"));
         } catch(Exception $e){
             Log::error($e);
