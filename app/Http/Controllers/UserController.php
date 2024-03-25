@@ -153,7 +153,8 @@ class UserController extends Controller
 
             foreach($request->missions as $missionId){
                 $mission = Mission::find($missionId);
-                $userobjGrade = Employee::select("grade")->where("employee_id",$userObj->employee_id)->first();
+                // $userobjGrade = Employee::select("grade")->where("employee_id",$userObj->employee_id)->first();
+                $userobjGrade = $userObj->grade;
                 Log::debug("user grade - ".$userobjGrade);
                 $allowance = GradeAllowance::select("allowance")->where("grade",$userobjGrade["grade"])->first();
                 Log::debug("user allowance - ".$allowance);
