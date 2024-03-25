@@ -192,7 +192,11 @@ class UserController extends Controller
             $mission = Mission::find($request->mission_id);
             Log::debug("inside user controller - " . $mission);
 
-            $Data = User::where("department",$mission["department"])->get();
+            // $Data = User::where("department",$mission["department"])->get();
+            $Data =User::where("department",$mission["department"])
+                ->whereDoesntHave('missions', function ($query) use($request) {
+                    $query->where('mission_id', $request->mission_id);
+                })->get();
 
             return json_encode(array("Status" =>  1, "Data" => $Data ,"Message" => "Users fetched successfully"));
         } catch(Exception $e){

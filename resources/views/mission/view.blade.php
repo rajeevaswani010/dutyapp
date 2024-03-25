@@ -2,13 +2,27 @@
 
 @section('content')
 <style>
-    /* .slider-modal .modal-content{
-        height: 100vh !important;
-        width: 50% !important;
-        position: fixed;
-        top: 0;
-        left: 50%;    
-    } */
+
+#createMissionModal .modal-dialog{
+    position: absolute;
+    top: -3vh;
+    left: 32vw;
+}
+
+#createMissionModal .modal-content{
+    width: 36vw;
+}
+
+#createMissionModal .form-content{
+    height: 78vh;
+    overflow-y: auto; 
+}
+
+input.hidestep::-webkit-outer-spin-button,
+input.hidestep::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 </style>
 
 <main id="main" class="main">
@@ -102,7 +116,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="missionTable" class="table table-hover datatable dataTable-table">
+                            <table id="missionTable" class="display pt-3 pb-3">
                                 <thead>
                                     <tr>
                                         <th>{{ __("Mission ID") }}</th>
@@ -114,12 +128,12 @@
                                         <th>{{ __("Staff Required") }}</th>
                                         <th>{{ __("Staff Assigned") }}</th>
                                         <th>{{ __("Number of days") }}</th>
-                                        <th>{{ __("Number of nights") }}</th>
+                                        <th>{{ __("Status") }}</th>
                                         <th>{{ __("Start Date") }}</th>
                                         <th>{{ __("End Date") }}</th>
                                         <th>{{ __("Vehicle Required") }}</th>
                                         <th>{{ __("Air Ticket Required") }}</th>
-                                        <th style="position:sticky;"> </th>
+                                        <th> Action </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -138,7 +152,7 @@
                                                 {{ count($DT->users) }}
                                             </td>
                                             <td>{{ $DT->num_of_days }}</td>
-                                            <td>{{ $DT->num_of_nights }}</td>
+                                            <td>{{ $DT->status }}</td>
                                             <td>{{ $DT->start_date }}</td>
                                             <td>{{ $DT->end_date }}</td>
                                             <td>{{ $DT->vehicle_required }}</td>
@@ -166,13 +180,10 @@
                     </div>
                     <!-- End Table with stripped rows -->
                 </div>
+                <!-- mission table end -->
             </div>
         </div>
     </section>
-
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#content">
-        Open Slider Modal
-    </button>
 
 </main><!-- End #main -->
 
@@ -182,166 +193,178 @@
 <div class="modal fade" id="createMissionModal" tabindex="-1" role="dialog" aria-labelledby="createMissionModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="createMissonModal">{{ __("Create New Mission") }}</h3>
-                <button class="btn btn-danger btn-sm float-right" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xl-12">
-                        {!! Form::open(['id' => 'createmission']) !!}
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label for="purpose" class="col-form-label text-dark">{{ __("Purpose") }}</label>
-                                <input class="form-control font-style" name="purpose" type="text" id="purpose" required />
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="country" class="col-form-label text-dark">{{ __("Country") }}</label>
-                                <select class="form-control" name="country" id="country">
-                                        <option value="">{{ __("--Select Country--") }}</option>
-                                        @foreach ($Countries as $country)
-                                            <option value={{ $country['name'] }}>{{ $country['name'] }}</option>
-                                        @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="city" class="col-form-label text-dark">{{ __("City") }}</label>
-                                <input class="form-control font-style" name="city" type="text" id="city" required />
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="start_date" class="col-form-label text-dark">{{ __("Start") }}</label>
-                                <input class="form-control font-style" name="start_date" type="date" id="start_date" required />
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="end_date" class="col-form-label text-dark">{{ __("End") }}</label>
-                                <input class="form-control font-style" name="end_date" type="date" id="end_date" required />
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="travel_start_date" class="col-form-label text-dark">{{ __("Travel Start") }}</label>
-                                <input class="form-control font-style" name="travel_start_date" type="date" id="travel_start_date" required />
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="travel_return_date" class="col-form-label text-dark">{{ __("Travel Return") }}</label>
-                                <input class="form-control font-style" name="travel_return_date" type="date" id="travel_return_date" required />
-                            </div>
-
-
-                            <div class="form-group col-md-4">
-                                <label for="num_of_staff" class="col-form-label text-dark">{{ __("Number of Staff") }}</label>
-                                <input class="form-control font-style" name="num_of_staff" type="number" id="num_of_staff" required min="0" step="1" />
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="num_of_days" class="col-form-label text-dark">{{ __("Number of Days") }}</label>
-                                <input class="form-control font-style" name="num_of_days" type="number" id="num_of_days" required min="0" step="1"/>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="num_of_nights" class="col-form-label text-dark">{{ __("Number of Nights") }}</label>
-                                <input class="form-control font-style" name="num_of_nights" type="number" id="num_of_nights" required min="0" step="1"/>
-                            </div>
-
-                            <!-- <div class="form-group col-md-4">
-                                <label for="section" class="col-form-label text-dark">{{ __("Section") }}</label>
-                                <input class="form-control font-style" name="section" type="text" id="section" required/>
-                            </div> -->
-                            <div class="form-group col-md-8">
-                                <label for="department" class="col-form-label text-dark">{{ __("Department") }}</label>
-                                <select class="form-control" name="department" id="department">
-                                        <option value="">{{ __("--Select Department--") }}</option>
-                                        @foreach ($Departments as $department)
-                                            <option value={{ $department['name'] }}>{{ $department['name'] }}</option>
-                                        @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="directorate" class="col-form-label text-dark">{{ __("Directorate") }}</label>
-                                <input class="form-control font-style" name="directorate" type="text" id="directorate" required/>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="travelling_area_from" class="col-form-label text-dark">{{ __("Travelling Area From") }}</label>
-                                <input class="form-control font-style" name="travelling_area_from" type="text" id="travelling_area_from" required/>
-                            </div>
-
-                            <div class="form-check col-md-6 mt-4 mr-4">
-                                <input class="form-check-input ml-2" type="checkbox" name="air_ticket_required" value="" id="air_ticket_required">
-                                <label class="form-check-label" for="air_ticket_required">
-                                    Air Ticket Required ?
-                                </label>
-                            </div>
-                            <div class="form-check col-md-6 mt-4">
-                                <input class="form-check-input ml-2" type="checkbox" name="vehicle_required" value="" id="vehicle_required">
-                                <label class="form-check-label" for="vehicle_required">
-                                    Vehicle Required ?
-                                </label>
-                            </div>
-
-                            <div class="form-group col-md-12">
-                                <label for="remarks" class="col-form-label text-dark">{{ __("Remarks") }}</label>
-                                <textarea class="form-control font-style" name="remarks" id="remarks" placeholder="enter remarks" rows=3></textarea>
-                            </div>
-                            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title" id="createMissonModal">{{ __("Create New Mission") }}</h3>
+                            <button class="btn btn-danger btn-sm window-close-btn" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    {!! Form::open(['id' => 'createmission']) !!}
+                                    <div class="row form-content">
+                                        <div class="form-group col-md-4 mb-1">
+                                            <label for="type"
+                                                class="col-form-label text-dark">{{ __("Type") }}</label>
+                                            <select class="form-control" name="type" id="type" value="" required>
+                                                <option value="internal">{{ __("Inside") }}</option>
+                                                <option value="external">{{ __("Outside") }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4"></div>
+                                        <div class="form-group col-md-4 mb-1">
+                                            <label for="allowance"
+                                                class="col-form-label text-dark">{{ __("Allowance") }}</label>
+                                            <select class="form-control" name="allowance" id="allowance" value="" required>
+                                                <option value=0>0</option>
+                                                <option value=25>25%</option>
+                                                <option value=50>50%</option>
+                                                <option value=75>75%</option>
+                                                <option value=100 selected>100%</option>
+                                            </select>
+                                        </div>
 
+                                        <div class="form-group col-md-12 mb-1">
+                                            <label for="purpose"
+                                                class="col-form-label text-dark">{{ __("Purpose") }}</label>
+                                            <textarea class="form-control font-style" row=2 name="purpose" id="purpose" required ></textarea>
+                                        </div>
+
+                                        <div class="form-group col-md-6 mb-1">
+                                            <label for="country"
+                                                class="col-form-label text-dark">{{ __("Country") }}</label>
+                                            <select class="form-control" name="country" id="country">
+                                                <option value="">{{ __("--Select Country--") }}
+                                                </option>
+                                                @foreach($Countries as $country)
+                                                    <option value={{ $country['name'] }}>
+                                                        {{ $country['name'] }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-6  mb-1">
+                                            <label for="city"
+                                                class="col-form-label text-dark">{{ __("City") }}</label>
+                                            <input class="form-control font-style" name="city" type="text" id="city"
+                                                required />
+                                        </div>
+                                                                                
+                                        <div class="form-group col-md-4  mb-1">
+                                            <label for="section"
+                                                class="col-form-label text-dark">{{ __("Section") }}</label>
+                                            <input class="form-control font-style" name="section" type="text"
+                                                id="section" required />
+                                        </div>
+
+                                        <div class="form-group col-md-8  mb-1">
+                                            <label for="directorate"
+                                                class="col-form-label text-dark">{{ __("Directorate") }}</label>
+                                            <input class="form-control font-style" name="directorate" type="text"
+                                                id="directorate" required />
+                                        </div>
+
+                                        <div class="form-group col-md-12  mb-1">
+                                            <label for="department"
+                                                class="col-form-label text-dark">{{ __("Department") }}</label>
+                                            <select class="form-control" name="department" id="department">
+                                                <option value="">{{ __("--Select Department--") }}
+                                                </option>
+                                                @foreach($Departments as $department)
+                                                    <option value={{ $department['name'] }}>
+                                                        {{ $department['name'] }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-5 col-sm-12  mb-1">
+                                            <label for="num_of_staff"
+                                                class="col-form-label text-dark">{{ __("Number of Employees") }}</label>
+                                            <input class="form-control font-style" name="num_of_staff" type="number"
+                                                id="num_of_staff" required min="0" step="1" />
+                                        </div>
+
+                                        <div class="form-group col-md-5 col-sm-12  mb-1">
+                                            <label for="num_of_days"
+                                                class="col-form-label text-dark">{{ __("Number of Days") }}</label>
+                                            <input class="form-control font-style" name="num_of_days" type="number"
+                                                id="num_of_days" required min="0" step="1" />
+                                        </div>
+
+                                        <div class="form-group col-md-8 col-sm-12  mb-1">
+                                            <label for="fees"
+                                                class="col-form-label text-dark">{{ __("Mission Fees") }}</label>
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <input class="form-control hidestep text-end font-style" name="fees" type="number"
+                                                        id="fees" required min="0"/>
+                                                </div>
+                                                <div class="col-4">( OMR )</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label for="remarks"
+                                                class="col-form-label text-dark">{{ __("Remarks") }}</label>
+                                            <textarea class="form-control font-style" name="remarks" id="remarks"
+                                                placeholder="enter remarks" rows=3></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div style="float:right;">
+                                <button type="button" class="btn btn-danger" style="margin-right: 2rem;" data-bs-dismiss="modal">{{ __("Close") }}</button>
+                                <input class="btn btn-xs btn-primary" type="submit" value='{{ __("Send") }}'>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{ __("Close") }}</button>
-                <input class="btn btn-xs btn-primary" type="submit" value='{{ __("Send") }}'>
-            </div>
-            {!! Form::close() !!}
+        {!! Form::close() !!}
         </div>
     </div>
 </div>
 <script>
+
+// fix columns.. lke sticky But NOT Working.. 
+    $(document).ready(function(){
+        var datatable = new DataTable('#missionTable',{
+            fixedColumns: {
+                end: 1
+            }
+        });
+    });
+
     $("#createmission").submit(function (event) {
         event.preventDefault();
 
-        var formData = {
-            purpose: $("#createmission #purpose").val(),
-            country:$("#createmission #country").val(),
-            city:$("#createmission #city").val(),
-            num_of_staff: $("#createmission #num_of_staff").val(),
-            num_of_days: $("#createmission #num_of_days").val(),
-            num_of_nights:$("#createmission #num_of_nights").val(),
-            section:$("#createmission #section").val(),
-            department:$("#createmission #department").val(),
-            directorate:$("#createmission #directorate").val(),
-            travelling_area_from: $("#createmission #travelling_area_from").val(),
-            start_date:$("#createmission #start_date").val(),
-            end_date:$("#createmission #end_date").val(),
-            travel_start_date:$("#createmission #travel_start_date").val(),
-            travel_return_date:$("#createmission #travel_return_date").val(),
-            remarks:$("#createmission #remarks").val(),
-            air_ticket_required:$("#createmission #air_ticket_required").is(":checked"),
-            vehicle_required:$("#createmission #vehicle_required").is(":checked")
-        };
+        var formData = $(this).serialize();
 
-        // showloading();
+        // console.log(formData);
         $.ajax({
             url: "{{ URL('mission/add') }}",
-            method: "POST",
-            headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-            data: formData,
-            dataType: "json",
-            encode: true,
-            success: function( data, textStatus, jqXHR ) {
-                // hideloading();
-                $('#createMissionModal').modal("hide");
-                alert("mission successfully added");
-                window.location.reload();
-            },
-            error: function( jqXHR, textStatus, errorThrown ) {
-                // hideloading();
-                alert("error");
-            }
-        })
+                method: 'POST', // Use PUT method for updating
+                data: formData, // Form data
+                success: function( data, textStatus, jqXHR ) {
+                        // hideloading();
+                        $('#createMissionModal').modal("hide");
+                        alert("mission successfully added");
+                        window.location.reload();
+                },
+                error: function( jqXHR, textStatus, errorThrown ) {
+                        // hideloading();
+                        alert("error");
+                }
+        });
+
+        // showloading();
+
     });
 </script>
 

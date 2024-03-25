@@ -26,7 +26,8 @@
     <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/DataTables-2.0.2/css/dataTables.dataTables.css') }}">
     <link href="{{ asset('assets/vendor/toastr/toastr.min.css') }}" rel="stylesheet">
       <!-- Vendor JS Files -->
     <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
@@ -35,18 +36,14 @@
     <script src="{{ asset('assets/vendor/chart.js/chart.umd.js') }}"></script>
     <script src="{{ asset('assets/vendor/echarts/echarts.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/quill/quill.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
+    <!-- <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script> -->
     <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
     <script src="{{ asset('assets/vendor/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/DataTables-2.0.2/js/dataTables.min.js') }}"></script>
 
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-messaging.js"></script>
-    
-    
     <!-- Template Main CSS File -->
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/niceadmin.css') }}" rel="stylesheet">
     <script>
         toastr.options = {
             "closeButton": false,
@@ -299,53 +296,20 @@
 
   </aside><!-- End Sidebar-->
 
-  <div class="container-fluid">
-        @yield('content')
+  <div id="myEventRouter" hidden>
+          <h1>I am eventRouter for routing local events</h1>
   </div>
-
+  
+  <div class="container-fluid">
+        @yield('content')        
+  </div>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     
   <!-- Template Main JS File -->
+  <script src="{{ asset('assets/js/events.js') }}"></script>
   <script src="{{ asset('assets/js/main.js') }}"></script>
-  <script>
-        var firebaseConfig = {
-          apiKey: "YOUR_API_KEY",
-          authDomain: "YOUR_AUTH_DOMAIN",
-          projectId: "YOUR_PROJECT_ID",
-          storageBucket: "YOUR_STORAGE_BUCKET",
-          messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-          appId: "YOUR_APP_ID"
-        };
 
-        firebase.initializeApp(firebaseConfig);
-        const messaging = firebase.messaging();
-
-        console.log("requesting permission..");
-        
-        messaging.requestPermission()
-          .then(function() {
-            console.log("Notification permission granted.");
-            // Get registration token. Initially this makes a network call, once retrieved
-            // subsequent calls to getToken will return from cache.
-            return messaging.getToken();
-          })
-          .then(function(token) {
-            console.log("FCM token:", token);
-            // Send the token to your server to associate it with a user
-          })
-          .catch(function(err) {
-            console.log("Unable to get permission to notify.", err);
-          });
-          console.log("got permission..");
-
-
-          messaging.onMessage(function(payload) {
-            console.log("Message received. ", payload);
-            // Handle the received message
-          });
-
-  </script>
-  
 </body>
+
 </html>

@@ -35,9 +35,9 @@ class MissionController extends Controller
 
 		$ActiveAction = "dashboard";
         if($user["department"] != "Admin"){
-		    $Data = Mission::with('users')->where("department",$user["department"])->get();
+		    $Data = Mission::where("department",$user["department"])->orderBy("created_at", "DESC")->get();
         } else {
-            $Data = Mission::with('users')->get();
+            $Data = Mission::orderBy("created_at", "DESC")->get();
         }
 
         if($request->end_date != ""){
@@ -112,23 +112,25 @@ class MissionController extends Controller
             $MissionObj = new Mission();
 
             //set attributes
+
+            $MissionObj->type = $request->type;
+            $MissionObj->allowance_percentage = $request->allowance;        
             $MissionObj->purpose = $request->purpose;
             $MissionObj->country = $request->country;
             $MissionObj->city = $request->city;
-            $MissionObj->num_of_days = $request->num_of_days;
-            $MissionObj->num_of_nights = $request->num_of_nights;
             $MissionObj->section = $request->section;
-            $MissionObj->department = $request->department;
             $MissionObj->directorate = $request->directorate;
+
+            $MissionObj->department = $request->department;
             $MissionObj->num_of_staff = $request->num_of_staff;
-            $MissionObj->travelling_area_from = $request->travelling_area_from;
-            $MissionObj->start_date = $request->start_date;
-            $MissionObj->end_date = $request->end_date;
-            $MissionObj->travel_start_date = $request->travel_start_date;
-            $MissionObj->travel_return_date = $request->travel_return_date;
+
+            $MissionObj->num_of_days = $request->num_of_days;
+            $MissionObj->num_of_nights = $request->num_of_days - 1;
+
+            $MissionObj->fees = $request->fees;
             $MissionObj->remarks = $request->remarks;
-            $MissionObj->air_ticket_required = ($request->air_ticket_required == true)?1:0;
-            $MissionObj->vehicle_required = ($request->vehicle_required == true )?1:0;
+
+            $MissionObj->status = 0;
 
             $MissionObj->save();
 
@@ -172,9 +174,11 @@ class MissionController extends Controller
         $Data = Mission::with('users')->find($id);
         Log::debug($Data);
 
-		$ActiveAction = "mission";
+        $Departments = Department::get();
+        $Countries = Country::get();
 
-        return view('mission.edit', compact("Data","ActiveAction"));
+		$ActiveAction = "mission";
+        return view('mission.edit', compact("Data","Departments","Countries","ActiveAction"));
     }
 
     public function update(Request $request, $id){
@@ -185,9 +189,43 @@ class MissionController extends Controller
                 'email' => 'Please login to access the dashboard.',
             ])->onlyInput('email');
         }
+        
+        $mission = Mission::find($id);
+        if($mission == null){
+            return json_encode(array("Status" =>  0, "Message" => "Mission not found"));
+        }
 
-        $Input = $request->all();
+          // Remove the _token field from the request data
+        $requestData = $request->except('_token');
 
+        // $Input = $requestData->all();
+        Log::debug($requestData);
+
+        Mission::where('id', $id)->update($requestData);
+        return json_encode(array("Status" =>  1, "Message" => "Mission Updated Successfully"));
+    }
+
+    public function updateDatesAndResources(Request $request, $id){
+        if( !Auth::check() )
+        {
+            return redirect()->route('login')
+                ->withErrors([
+                'email' => 'Please login to access the dashboard.',
+            ])->onlyInput('email');
+        }
+        
+        $mission = Mission::find($id);
+        if($mission == null){
+            return json_encode(array("Status" =>  0, "Message" => "Mission not found"));
+        }
+
+          // Remove the _token field from the request data
+        $requestData = $request->except('_token');
+
+        // $Input = $requestData->all();
+        Log::debug($requestData);
+
+        Mission::where('id', $id)->update($requestData);
         return json_encode(array("Status" =>  1, "Message" => "Mission Updated Successfully"));
     }
 
