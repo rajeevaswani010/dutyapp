@@ -513,7 +513,7 @@
                                                 <label for="start_date"
                                                     class="col-form-label text-dark mb-1">{{ __("End Date") }}</label>
                                                 <input class="form-control hidestep text-end font-style" name="end_date"
-                                                    type="date" id="end_date" value="{{ $Data->end_date }}" disabled
+                                                    type="date" id="end_date" value="{{ $Data->end_date }}" 
                                                     />
                                             </div>
                                         </div>
