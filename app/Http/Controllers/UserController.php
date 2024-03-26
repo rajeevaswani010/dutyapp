@@ -156,7 +156,12 @@ class UserController extends Controller
                 // $userobjGrade = Employee::select("grade")->where("employee_id",$userObj->employee_id)->first();
                 $userobjGrade = $userObj->grade;
                 Log::debug("user grade - ".$userobjGrade);
-                $allowance = GradeAllowance::select("allowance")->where("grade",$userobjGrade)->first();
+                $allowance = 0;
+                if($mission->type == "internal"){
+                    $allowance = GradeAllowance::select("allowance as allowance")->where("grade",$userobjGrade)->first();
+                } else {
+                    $allowance = GradeAllowance::select("allowance_ext as allowance")->where("grade",$userobjGrade)->first();
+                }
                 Log::debug("user allowance - ".$allowance);
                 $total_allowance = $allowance["allowance"] * $mission->num_of_days * $mission->allowance_percentage/100;
                 $userObj->missions()->attach($missionId,['allowance_percent' => $mission->allowance_percentage, 'allowance' => $total_allowance]);

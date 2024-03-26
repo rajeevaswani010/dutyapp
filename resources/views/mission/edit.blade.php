@@ -30,7 +30,29 @@
                 <div class="card">
                     <div class="p-3" style="display:flex;">
                         <h3 class="p-0" style="flex:1;">Mission# {{ $Data->id }}</h3>
-                        <span>{{ $Data->status }}</span>
+                        <!-- <span>{{ $Data->status }}</span> -->
+                        @if($Data->status == 1)
+                            <span
+                                class="indicator-line rounded bg-secondary status planned">{{ __("Planned") }}</span>
+                        @elseif($Data->status == 2)
+                            <span
+                                class="indicator-line rounded bg-yellow status working">{{ __("Working") }}</span>
+                    <!--    @elseif($Data->status == 3)
+                            <span
+                                class="indicator-line rounded bg-warning status assigned">{{ __("Assigned") }}</span> -->
+                        @elseif($Data->status == 3)
+                            <span
+                                class="indicator-line rounded bg-success  status approved">{{ __("Approved") }}</span>
+                        @elseif($Data->status == 4)
+                            <span
+                                class="indicator-line rounded bg-primary status active">{{ __("Active") }}</span>
+                        @elseif($DataT->status == 5)
+                            <span
+                                class="indicator-line rounded bg-info status complete">{{ __("Complete") }}</span>
+                        @elseif($Data->status == 0)
+                            <span
+                                class="indicator-line rounded bg-danger status cancelled">{{ __("Cancelled") }}</span>
+                        @endif
                     </div>
                 </div>
                 <!-- mission status card ENDs-->

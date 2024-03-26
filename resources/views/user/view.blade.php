@@ -111,12 +111,12 @@
                                             <!-- <td>{{ $DT->is_active }}</td> -->
                                             <td>{{ count($DT->missions) }}</td>
                                             <!-- <td>{{ count($DT->missions) }}</td> -->
-                                            <td>
+                                           <!-- <td>
                                                 <button type="button" title="Assign Missions"
                                                     class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                                     data-bs-target="#assignMissionModal" onclick="onAssignMission()"
                                                     data-id="{{ $DT->id }}">Assign</button>
-                                            </td>
+                                            </td>  -->
                                         </tr>
                                     @endforeach
                                 </tbody>

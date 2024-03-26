@@ -157,16 +157,16 @@ input.hidestep::-webkit-inner-spin-button {
                                                 @elseif($DT->status == 2)
                                                     <span
                                                         class="indicator-line rounded bg-yellow status working">{{ __("Working") }}</span>
+                                              <!--  @elseif($DT->status == 3)
+                                                    <span
+                                                        class="indicator-line rounded bg-warning status assigned">{{ __("Assigned") }}</span> -->
                                                 @elseif($DT->status == 3)
                                                     <span
-                                                        class="indicator-line rounded bg-warning status assigned">{{ __("Assigned") }}</span>
+                                                        class="indicator-line rounded bg-success  status approved">{{ __("Approved") }}</span>
                                                 @elseif($DT->status == 4)
                                                     <span
-                                                        class="indicator-line rounded bg-success  status approved">{{ __("Approved") }}</span>
-                                                @elseif($DT->status == 5)
-                                                    <span
                                                         class="indicator-line rounded bg-primary status active">{{ __("Active") }}</span>
-                                                @elseif($DT->status == 6)
+                                                @elseif($DT->status == 5)
                                                     <span
                                                         class="indicator-line rounded bg-info status complete">{{ __("Complete") }}</span>
                                                 @elseif($DT->status == 0)
