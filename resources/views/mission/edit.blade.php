@@ -509,12 +509,13 @@
                     // Handle success response
                     console.log(response);
                     // Redirect or update the UI as needed
-                    alert("mission updated successfully")
+                    toastr["success"]("mission updated successfully")
+                    window.location.reload();
                 },
                 error: function(xhr, status, error) {
                     // Handle error response
                     console.error(xhr.responseText);
-                    alert("mission update failed")
+                    toastr["error"]("mission update failed")
                 }
         });
     });
@@ -588,12 +589,7 @@
                                                 step="1" />
                                         </div>
                                         <script>
-                                            $('#num_of_days').on('input', function(){
-                                                var val = $(this).val();
-                                                var currentDate = new Date($Data->start_date); // Get current date
-                                                var futureDate = new Date(currentDate.getTime() + (n * 24 * 60 * 60 * 1000)); // Add n days
-                                                // $('#end_date').val
-                                            });
+                                            //todo some validateion.. 
                                         </script>
                                     </div>
                                 </div>
@@ -626,12 +622,13 @@
                     // Handle success response
                     console.log(response);
                     // Redirect or update the UI as needed
-                    alert("mission updated successfully")
+                    toastr["success"]("mission updated successfully")
+                    window.location.reload();
                 },
                 error: function(xhr, status, error) {
                     // Handle error response
                     console.error(xhr.responseText);
-                    alert("mission update failed")
+                    toastr["error"]("mission update failed")
                 }
         });
     });
@@ -687,7 +684,8 @@
 <script>
     document.querySelector("#myEventRouter").addEventListener("userassigned", (event) => {
         console.log(event);
-        alert("user assigned successfully");
+        toastr["success"]("user assigned successfully");
+        window.location.reload();
     });
 
     function unAssignMission(){
@@ -713,11 +711,11 @@
             success: function (data, textStatus, jqXHR) {
                 console.log("operation performed successfully");
                 toastr["success"](data.Message);
-                // window.location.reload();
+                window.location.reload();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // hideloading();
-                alert("error");
+                toastr["error"]("error in operation");
             }
         });
 
@@ -737,16 +735,45 @@
         var panelHeader = $('<div class="panel-header">');
         panelHeader.append('<div class="row"><div class="col-lg-6"><h3 class="col-lg-9 card-title">Select User</h3></div> \
             <div class="col-lg-6"><div class="input-group mb-3"> \
-            <input type="text" class="form-control" placeholder="Search..." id="search" aria-label="Search" value="ttt" aria-describedby="basic-addon2"> \
+            <input type="text" class="form-control" placeholder="Search..." id="search" aria-label="Search" aria-describedby="basic-addon2"> \
             <div class="input-group-append"> \
-                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i>\
+                <button class="btn btn-outline-secondary" id="searchBtn" type="button"><i class="bi bi-search"></i>\
                 </button> \
             </div></div></div></div>');
 
         var panelBody = $('<div class="panel-body" style="margin-top:1rem;">');
-        var userList = $('<div>');
-        userList.html("Loading data...");
-        panelBody.append(userList);
+        // var userList = $('<div>');
+        // userList.html("Loading data...");
+        // panelBody.append(userList);
+
+        // Create a table element
+        var table = $('<table id="userTable" class="table table-hover datatable" style="width:100%;">');
+        var tbody = $('<tbody>');
+
+        // Create a table header row
+        var headerRow = $('<thead>');
+
+        headerRow.append('<th></th>');
+
+        // Add table headers
+        // for (var key in tableData[0]) {
+        //     headerRow.append('<th>'+key.toUpperCase()+'</th>');
+        // }
+            headerRow.append('<th>{{ __("Username") }}</th>');
+            headerRow.append('<th>{{ __("Id") }}</th>');
+            headerRow.append('<th>{{ __("Designation") }}</th>');
+            headerRow.append('<th>{{ __("Department") }}</th>');
+            headerRow.append('<th>{{ __("Phone") }}</th>');
+            headerRow.append('<th>{{ __("Gender") }}</th>');
+            headerRow.append('<th>{{ __("Email") }}</th>');
+        
+        table.append(headerRow);
+        table.append(tbody);
+        var newDiv = $('<div class="table table-responsive p-3" style="max-height:600px; overflow: scroll;">');
+        newDiv.append(table);
+
+        panelBody.append(newDiv);
+
         var panelFooter = $('<div class="panel-footer">');
 
         panel.append(panelHeader);
@@ -757,38 +784,12 @@
         $('#assignMissionModal .modal-body').append(panel);
         
 
-        var form_data = {
-            mission_id: mission_id,
-            filter: $('#userlistpanel #search').val()
-        }
         let callbacks = {
             success: function (data) {
-                userList.html("");
                 console.log(data);
                 let tableData = data;
-
-                // Create a table element
-                var table = $('<table id="userTable" class="table table-hover datatable" style="width:100%;">');
-                var tbody = $('<tbody>');
-
-                // Create a table header row
-                var headerRow = $('<thead>');
-
-                headerRow.append('<th></th>');
-
-                // Add table headers
-                // for (var key in tableData[0]) {
-                //     headerRow.append('<th>'+key.toUpperCase()+'</th>');
-                // }
-                    headerRow.append('<th>{{ __("Username") }}</th>');
-                    headerRow.append('<th>{{ __("Id") }}</th>');
-                    headerRow.append('<th>{{ __("Designation") }}</th>');
-                    headerRow.append('<th>{{ __("Department") }}</th>');
-                    headerRow.append('<th>{{ __("Phone") }}</th>');
-                    headerRow.append('<th>{{ __("Gender") }}</th>');
-                    headerRow.append('<th>{{ __("Email") }}</th>');
-                
-                table.append(headerRow);
+                let tbody = $('#userTable tbody');
+                tbody.html("");
 
                 // Create and populate the table rows with data
                 tableData.forEach(function (item) {
@@ -832,43 +833,59 @@
                     // }
                     tbody.append(row);
                 });
-                table.append(tbody);
-                var newDiv = $('<div class="table table-responsive p-3" style="max-height:600px; overflow: scroll;">');
-                newDiv.append(table);
-                userList.append(newDiv);
-
-                var table2 = new DataTable('#userTable',{
-                    fixedColumns: true
-                });
             },
 
             failure: function (errmsg) {
                 $("#assignMissionModal").css("display", "block");
-                userList.html(errmsg);
+                $('#userTable tbody').html(errmsg);
             }
         };
 
-        // get users details to assign for the mission.. 
-        $.ajax({
-            url: "{{ URL('/getUsers') }}",
-            method: "GET",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: form_data,
-            dataType: "json",
-            encode: true,
-            success: function (data, textStatus, jqXHR) {
-                console.log("mission fetched successfully");
-                callbacks.success(data.Data);
-                // window.location.reload();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                // hideloading();
-                alert("error");
-                callbacks.failure("fail to fetch data");
+
+        function refreshUserList(){
+            var form_data = {
+                mission_id: mission_id,
+                emp_id: $('#userlistpanel #search').val()
             }
+
+            // get users details to assign for the mission.. 
+            $.ajax({
+                url: "{{ URL('/getUsers') }}",
+                method: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: form_data,
+                dataType: "json",
+                encode: true,
+                success: function (data, textStatus, jqXHR) {
+                    console.log("mission fetched successfully");
+                    callbacks.success(data.Data);
+                    // window.location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // hideloading();
+                    toastr["error"]("operation error");
+                    callbacks.failure("fail to fetch data");
+                }
+            });
+        }
+
+        $('#userlistpanel #searchBtn').on('click',function(){
+            refreshUserList();
         });
+
+        $('#userlistpanel #search').keypress(
+            function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault(); // Prevent form submission
+                    refreshUserList();
+                }
+            }
+        );
+
+        //prepare user list panel
+        refreshUserList();
 
         var btnClose = $('<button class="btn btn-danger" data-bs-dismiss="modal">close</button>');
         panelFooter.append(btnClose);

@@ -217,9 +217,15 @@ class UserController extends Controller
             $Data =User::where("department",$mission["department"])
                 ->whereDoesntHave('missions', function ($query) use($request) {
                     $query->where('mission_id', $request->mission_id);
-                })->get();
+                });
+            
+            if($request->emp_id != ""){
+                // $Data = $Data->where("employee_id",$request->emp_id);
+                $Data = $Data->where("employee_id",'LIKE', '%' . $request->emp_id . '%');
+                
+            }
 
-            return json_encode(array("Status" =>  1, "Data" => $Data ,"Message" => "Users fetched successfully"));
+            return json_encode(array("Status" =>  1, "Data" => $Data->get() ,"Message" => "Users fetched successfully"));
         } catch(Exception $e){
             Log::error($e);
             return json_encode(array("Status" =>  0, "Message" => "User fetch failed."));
