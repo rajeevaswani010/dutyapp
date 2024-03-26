@@ -96,8 +96,36 @@
           </a>
         </li><!-- End Search Icon-->
 
-        <li class="nav-item dropdown">
+        <!-- start language dropdowmn -->
+        <li class="nav-item d-block">
+        <a
+          class="dash-head-link dropdown-toggle arrow-none me-0"
+          data-bs-toggle="dropdown"
+          href="#"
+          role="button"
+          aria-haspopup="false"
+          aria-expanded="false"
+          >
+          <i class="ti ti-world nocolor"></i>
+          <span class="drp-text hide-mob">{{ session("Lang") }}</span>
+          <i class="ti ti-chevron-down drp-arrow nocolor"></i>
+        </a>
+        <div class="dropdown-menu dash-h-dropdown dropdown-menu-end">
 
+    <a href="{{ URL('ChangeLanguage') }}/en" class="dropdown-item ">
+        <span>English</span>
+    </a>
+
+    <a href="{{ URL('ChangeLanguage') }}/ar" class="dropdown-item ">
+        <span>Arabic</span>
+    </a>
+
+        <h></h>
+        </div>
+          
+        </li>
+        <!-- end language dropdown -->
+        <li class="nav-item dropdown">
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
             <span class="badge bg-primary badge-number">{{auth()->user()->unreadNotifications->count()}}</span>
