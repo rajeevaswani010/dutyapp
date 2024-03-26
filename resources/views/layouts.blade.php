@@ -41,6 +41,9 @@
     <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
     <script src="{{ asset('assets/vendor/toastr/toastr.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/DataTables-2.0.2/js/dataTables.min.js') }}"></script>
+    
+    <!-- calendar plugin -->
+    <script src="{{ asset('assets/plugins/fullcalendar/index.global.min.js') }}"></script>
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/niceadmin.css') }}" rel="stylesheet">
@@ -294,43 +297,12 @@
   </header><!-- End Header -->
 
 
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ URL('/dashboard') }}">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ URL('/mission') }}">
-          <i class="bi bi-nut"></i>
-          <span>Missions</span>
-        </a>
-      </li><!-- End Missions Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ URL('/users') }}">
-          <i class="bi bi-person"></i>
-          <span>Users</span>
-        </a>
-      </li><!-- End User Page Nav -->
-
-    </ul>
-
-  </aside><!-- End Sidebar-->
-
+  
   <div id="myEventRouter" hidden>
           <h1>I am eventRouter for routing local events</h1>
   </div>
   
-  <div class="container-fluid">
-        @yield('content')        
-  </div>
+  @yield('content')        
 </div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     

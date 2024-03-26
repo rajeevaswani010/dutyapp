@@ -43,6 +43,7 @@ Route::post('/assignusertomissions', [UserController::class,'assignUserToMission
 Route::post('/unassignuserfrommissions', [UserController::class,'unAssignUserFromMissions']);
 Route::get('/getUsers', [UserController::class,'getUsers']);
 
+Route::get('dashboard/getMissions', [DashboardController::class, 'GetMissions']);
 
 Route::get('/deposit', [App\Http\Controllers\DepositController::class,'deposit'])->name('deposit');
 Route::post('/doDeposit', [App\Http\Controllers\DepositController::class,'doDeposit'])->name('doDeposit');

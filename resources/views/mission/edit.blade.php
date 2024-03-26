@@ -58,8 +58,46 @@
                 <!-- mission status card ENDs-->
                 
                 <div class="row">
-                    <!-- mission info card -->
-                    <div class="col-lg-8">
+                    <!-- mission duration and info card -->
+                    <div class="col-lg-6">
+                        <!-- mission duration card START -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title p-0">Missions Dates</h5>
+                                <button type="button" title="Edit Mission"
+                                    class="btn btn-primary btn-sm float-right" data-bs-toggle="modal"
+                                    data-bs-target="#editMissionDurationAndResourceModal" 
+                                    data-id="{{ $Data->id }}">Edit</button>
+                            </div>
+                            <div class="card-body pt-3">
+                                <div class="row">
+
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="label mb-1">Start Date</div>
+                                        <div> 
+                                            @if( empty($Data->start_date) )
+                                                -
+                                            @else 
+                                                {{ $Data->start_date }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="label mb-1">End Date</div>
+                                        <div> 
+                                            @if( empty($Data->end_date) )
+                                                -
+                                            @else 
+                                                {{ $Data->end_date }}
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- mission duration card END -->
+
+                        <!-- info card - start -->
                         <div class="card">
                         <div class="card-header">
                             <h5 class="card-title p-0">Information</h5>
@@ -107,7 +145,7 @@
                                     <div>{{ $Data->department }}</div>
                                 </div>
                                 <div class="col-lg-3 mb-3">
-                                    <div class="label mb-1">Number of Staff</div>
+                                    <div class="label mb-1">Required Staff</div>
                                     <div>{{ $Data->num_of_staff }}</div>
                                 </div>
                                 <div class="col-lg-3 mb-3">
@@ -136,49 +174,50 @@
                             </div>
                         </div>
                         </div>
+                        <!-- info card - end -->
                     </div>
-                    <!-- mission info card ENDS -->
-                    <!-- mission start end and department resources  -->
-                    <div class="col-lg-4">
+                    <!-- mission duration and info card ENDS -->
+                    
+                    <!-- mission department resources  -->
+                    <div class="col-lg-6">
+                        <!-- mission resource card START -->
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title p-0">Missions Dates & Resources</h5>
-                                <button type="button" title="Edit Mission"
+                                <h5 class="card-title p-0">Missions Resources Summary</h5>
+                                <!-- <button type="button" title="Edit Mission"
                                     class="btn btn-primary btn-sm float-right" data-bs-toggle="modal"
-                                    data-bs-target="#editMissionDurationAndResourceModal" 
-                                    data-id="{{ $Data->id }}">Edit</button>
+                                    data-bs-target="#editMissionResourceModal" 
+                                    data-id="{{ $Data->id }}">Edit</button> -->
                             </div>
                             <div class="card-body pt-3">
                                 <div class="row">
+                                    <!-- donut chart -->
+                                    <div id="resourceChart" class="col-lg-12">
 
-                                    <div class="col-lg-12 mb-3">
-                                        <div class="label mb-1">Number of staff Assigned</div>
-                                        <div>{{ count($Data->users) }} / {{ $Data->num_of_staff }}</div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="label mb-1">Department</div>
+                                        <div>{{ $Data->department }}</div>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="label mb-1">Assigned Staff / Required Staff</div>
+                                        @if( count($Data->users) == $Data->num_of_staff )
+                                        <span
+                                            style="font-size:1rem;font-weight:600;color:#fff;background:#11d755;padding:0.25rem 1rem 0.25rem 1rem;">
+                                            {{ count($Data->users) }} / {{ $Data->num_of_staff }}
+                                        </span>
+                                        @else
+                                        <span
+                                            style="font-size:1rem;font-weight:600;color:#fff;background:red;padding:0.25rem 1rem 0.25rem 1rem;">
+                                            {{ count($Data->users) }} / {{ $Data->num_of_staff }}
+                                        </span>
+                                        @endif
                                     </div>
                                     
-                                    <div class="col-lg-6 mb-3">
-                                        <div class="label mb-1">Start Date</div>
-                                        <div> 
-                                            @if( empty($Data->start_date) )
-                                                -
-                                            @else 
-                                                {{ $Data->start_date }}
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 mb-3">
-                                        <div class="label mb-1">End Date</div>
-                                        <div> 
-                                            @if( empty($Data->end_date) )
-                                                -
-                                            @else 
-                                                {{ $Data->end_date }}
-                                            @endif
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- mission resource card END -->
                     </div>
                     <!-- mission start end and department resources  END -->            
                 </div>
@@ -194,25 +233,19 @@
                     <!-- assign users  table start -->
                     <div class="card">
                         <div class="card-header ">
-                                <div class="col-lg-5">
+                                <div class="col-lg-9">
                                     <h5 class="card-title p-0">Assigned Users</h5>
                                 </div>
                                 <div class="col-lg-3">
-                                    <span
-                                        style="font-size:1rem;font-wight:600;color:#fff;background:red;padding:0.5rem 1rem 0.5rem 1rem;">
-                                        {{ count($Data->users) }} / {{ $Data->num_of_staff }}
-                                    </span>
-                                </div>
-                                <div class="col-lg-4">
                                     @if( count($Data->users)  >=  $Data->num_of_staff )
                                         <button type="button" title="Assign Missions" class="btn btn-primary btn-sm "
                                             data-bs-toggle="modal" data-bs-target="#assignMissionModal"
                                             onclick="onAssignMission()" data-id="{{ $Data->id }}"
-                                            disabled>Assign</button>
+                                            style="float:right;" disabled>Assign</button>
                                     @else
                                         <button type="button" title="Assign Missions" class="btn btn-primary btn-sm"
                                             data-bs-toggle="modal" data-bs-target="#assignMissionModal"
-                                            onclick="onAssignMission()" data-id="{{ $Data->id }}">Assign</button>
+                                            onclick="onAssignMission()" data-id="{{ $Data->id }}" style="float:right;">Assign</button>
                                     @endif
                                 </div>
                         </div>
@@ -249,7 +282,7 @@
                                                         data-bs-target="#editMissionUserModal" 
                                                         data-id="{{ $Data->id }}">Edit</button>
                                                     <button onclick="unAssignMission()" data-arg="{{ $user->id }}"
-                                                        class="btn btn-primary btn-sm">Remove</button>
+                                                        class="btn btn-danger btn-sm">Remove</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -273,7 +306,35 @@
                 end: 1
             }
         });
-    });
+
+        // radial bar chart - start
+            // based on assigned user / total required user percentage.
+
+        var assignedUsers = '{{ count($Data->users) }}';
+        var requiredUsers = '{{ $Data->num_of_staff }}';
+        var percentage = (assignedUsers/requiredUsers)*100
+
+        var options = {
+          series: [percentage],
+          chart: {
+          height: 480,
+          type: 'radialBar',
+        },
+        plotOptions: {
+          radialBar: {
+            hollow: {
+              size: '70%',
+            }
+          },
+        },
+        labels: ['Assigned Staff'],
+        };
+
+        var chart = new ApexCharts(document.querySelector("#resourceChart"), options);
+        chart.render();
+
+        // radial bar chart - end
+});
 
 </script>
 </main><!-- End #main -->
@@ -497,7 +558,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">{{ __("Edit Mission Dates / Staff") }}</h3>
+                            <h3 class="card-title">{{ __("Edit Mission Dates") }}</h3>
                             <button class="btn btn-danger btn-sm window-close-btn" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -507,22 +568,6 @@
                                 <div class="col-xl-12">
                                     {!! Form::open(['id' => 'editMissionDurationAndResource']) !!}
                                     <div class="row form-content">
-                                        <div class="form-group col-lg-6 mb-3">
-                                            <label for="num_of_staff"
-                                                class="col-form-label text-dark mb-1">{{ __("Number of Staff Required") }}</label>
-                                            <input class="form-control font-style" name="num_of_staff" type="number"
-                                                id="num_of_staff" value="{{ $Data->num_of_staff }}" required min="0"
-                                                step="1" />
-                                        </div>
-
-                                        <div class="form-group col-lg-6 mb-3">
-                                            <label for="num_of_days"
-                                                class="col-form-label text-dark mb-1">{{ __("Number of Days") }}</label>
-                                            <input class="form-control font-style" name="num_of_days" type="number"
-                                                id="num_of_days" value="{{ $Data->num_of_days }}" required min="0"
-                                                step="1" />
-                                        </div>
-
                                         <div class="row">
                                             <div class="form-group col-lg-6  mb-3">
                                                 <label for="start_date"
@@ -535,9 +580,16 @@
                                                 <label for="start_date"
                                                     class="col-form-label text-dark mb-1">{{ __("End Date") }}</label>
                                                 <input class="form-control hidestep text-end font-style" name="end_date"
-                                                    type="date" id="end_date" value="{{ $Data->end_date }}" 
+                                                    type="date" id="end_date" value="{{ $Data->end_date }}"
                                                     />
                                             </div>
+                                        </div>
+                                        <div class="form-group col-lg-6 mb-3">
+                                            <label for="num_of_days"
+                                                class="col-form-label text-dark mb-1">{{ __("Number of Days") }}</label>
+                                            <input class="form-control font-style" name="num_of_days" type="number"
+                                                id="num_of_days" value="{{ $Data->num_of_days }}" required min="0"
+                                                step="1" />
                                         </div>
                                         <script>
                                             $('#num_of_days').on('input', function(){

@@ -63,5 +63,38 @@ class DashboardController extends Controller
 		//for super admin.. show this
 	}
 
+    public function GetMissions(Request $request){
+        try {
+            if( !Auth::check() )
+            {
+                return redirect()->route('login')
+                    ->withErrors([
+                    'email' => 'Please login to access the dashboard.',
+                ])->onlyInput('email');
+            }
+            Log::debug($request);
+            $from = $request->start;
+            $to = $request->end;
+            $Data = Mission::select(
+                        DB::raw('CAST(start_date AS DATE) AS start'),
+                        DB::raw('count(*) as title'),
+                    )
+                    ->whereIn("status",[1,2])
+                    ->where("start_date",">=",$from." 00:00:00")
+                    ->where("start_date","<=",$to." 23:59:59")
+                    ->groupBy('start')
+                    ->get();
 
+            foreach($Data as $dt){
+                $dt->url = "/mission?start_date=".$dt->start."&end_date=".$dt->start."&status=1";
+            }
+            Log::debug(json_encode($Data));
+            // return json_encode(array("Status" =>  1, "Data" => $Data, "Message" => "Mission Created Successfully"));
+            return json_encode($Data);
+
+        } catch(Exception $e){
+            Log::error($e);
+            return json_encode(array("Status" =>  0, "Message" => "Mission creation failed"));
+        }
+    }    
 }
