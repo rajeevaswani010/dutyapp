@@ -610,9 +610,9 @@ h6 {
 .sidebar {
   position: fixed;
   top: 60px;
-  left: 0;
+  left: -200px;
   bottom: 0;
-  width: 300px;
+  width: 200px;
   z-index: 996;
   transition: all 0.3s;
   padding: 20px;
@@ -625,7 +625,7 @@ h6 {
 
 @media (max-width: 1199px) {
   .sidebar {
-    left: -300px;
+    left: -200px;
   }
 }
 
@@ -653,7 +653,7 @@ h6 {
   }
 
   .toggle-sidebar .sidebar {
-    left: -300px;
+    left: 0;
   }
 }
 
@@ -1293,6 +1293,7 @@ h6 {
   padding: 4px 6px 4px 6px;
   font-size: small;
   font-weight: bold;
+  margin: auto;
 }
 
 .status.planned,

@@ -175,6 +175,18 @@ class MissionController extends Controller
         $Data = Mission::with('users')->find($id);
         Log::debug($Data);
 
+        if($Data->start_date != null || $Data->end_date != null || count($Data->users) > 0){
+            Log::debug("inside conidton 1");
+            $Data->status = Status::WORKING;
+        }
+
+        if($Data->start_date != null && $Data->end_date != null && count($Data->users) == $Data->num_of_staff) {
+            Log::debug("inside conidton 2");
+            $Data->status = Status::APPROVED;
+        }
+        $Data->save();
+
+
         $Departments = Department::get();
         $Countries = Country::get();
 
@@ -200,33 +212,13 @@ class MissionController extends Controller
         $requestData = $request->except('_token');
 
         // $Input = $requestData->all();
-        Log::debug($requestData);
+        // Log::debug($requestData);
 
         Mission::where('id', $id)->update($requestData);
-        return json_encode(array("Status" =>  1, "Message" => "Mission Updated Successfully"));
-    }
 
-    public function updateDatesAndResources(Request $request, $id){
-        if( !Auth::check() )
-        {
-            return redirect()->route('login')
-                ->withErrors([
-                'email' => 'Please login to access the dashboard.',
-            ])->onlyInput('email');
-        }
-        
-        $mission = Mission::find($id);
-        if($mission == null){
-            return json_encode(array("Status" =>  0, "Message" => "Mission not found"));
-        }
+        $mission = Mission::with('users')->find($id);
+        Log::debug($mission);
 
-          // Remove the _token field from the request data
-        $requestData = $request->except('_token');
-
-        // $Input = $requestData->all();
-        Log::debug($requestData);
-
-        Mission::where('id', $id)->update($requestData);
         return json_encode(array("Status" =>  1, "Message" => "Mission Updated Successfully"));
     }
 

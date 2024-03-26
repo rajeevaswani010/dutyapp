@@ -26,7 +26,7 @@
     <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-    <!-- <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet"> -->
+    <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/vendor/DataTables-2.0.2/css/dataTables.dataTables.css') }}">
     <link href="{{ asset('assets/vendor/toastr/toastr.min.css') }}" rel="stylesheet">
       <!-- Vendor JS Files -->
@@ -36,7 +36,7 @@
     <script src="{{ asset('assets/vendor/chart.js/chart.umd.js') }}"></script>
     <script src="{{ asset('assets/vendor/echarts/echarts.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/quill/quill.min.js') }}"></script>
-    <!-- <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script> -->
+    <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
     <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
     <script src="{{ asset('assets/vendor/toastr/toastr.min.js') }}"></script>
@@ -76,7 +76,7 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="{{ URL('/dashboard') }}" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">DutyApp</span>
       </a>
@@ -297,18 +297,48 @@
   </header><!-- End Header -->
 
 
-  
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ URL('/dashboard') }}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ URL('/mission') }}">
+          <i class="bi bi-nut"></i>
+          <span>Missions</span>
+        </a>
+      </li><!-- End Missions Page Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ URL('/users') }}">
+          <i class="bi bi-person"></i>
+          <span>Users</span>
+        </a>
+      </li><!-- End User Page Nav -->
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
   <div id="myEventRouter" hidden>
           <h1>I am eventRouter for routing local events</h1>
   </div>
   
   @yield('content')        
+
 </div>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-    
-  <!-- Template Main JS File -->
-  <script src="{{ asset('assets/js/events.js') }}"></script>
-  <script src="{{ asset('assets/js/main.js') }}"></script>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  
+<!-- Template Main JS File -->
+<script src="{{ asset('assets/js/events.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
 
 </body>
 

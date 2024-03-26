@@ -157,9 +157,6 @@ input.hidestep::-webkit-inner-spin-button {
                                                 @elseif($DT->status == 2)
                                                     <span
                                                         class="indicator-line rounded bg-yellow status working">{{ __("Working") }}</span>
-                                              <!--  @elseif($DT->status == 3)
-                                                    <span
-                                                        class="indicator-line rounded bg-warning status assigned">{{ __("Assigned") }}</span> -->
                                                 @elseif($DT->status == 3)
                                                     <span
                                                         class="indicator-line rounded bg-success  status approved">{{ __("Approved") }}</span>
@@ -196,13 +193,13 @@ input.hidestep::-webkit-inner-spin-button {
                                                             data-original-title="Edit">
                                                             <i class="bi bi-pencil-square"></i>
                                                         </a>
-                                                      <!--  <a href="{{ URL('mission') }}/{{ $DT->id }}/edit"
-                                                            class="btn btn-primary mx-3 btn btn-sm align-items-center"
+                                                        <!-- <a href="{{ URL('mission') }}/{{ $DT->id }}/edit"
+                                                            class="btn btn-warning mx-3 btn btn-sm align-items-center"
                                                             data-url="{{ URL('mission') }}/{{ $DT->id }}/"
                                                             data-ajax-popup="true" data-title="Edit Coupon"
                                                             data-bs-toggle="tooltip" title="Edit"
                                                             data-original-title="Edit">
-                                                            <i class="bi bi-pencil-square"></i>
+                                                            <i class="bi bi-disc"></i>
                                                         </a> -->
                                                     </div>
                                                 </span>
@@ -374,12 +371,7 @@ input.hidestep::-webkit-inner-spin-button {
             columnDefs: [{ width: 200, targets: 0 }],
             scrollCollapse: true,
             scrollX: true,
-            scrollY: 600,
-            fixedColumns: true,
-            fixedColumns: {
-                start:1,
-                end:1
-            }
+            scrollY: 600
         });
     });
 

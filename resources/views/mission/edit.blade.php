@@ -737,9 +737,15 @@
         $("#assignMissionModal").css("display", "block");
         $('#assignMissionModal .modal-body').html("");
 
-        var panel = $('<div class="panel panel-default">');
+        var panel = $('<div id="userlistpanel" class="panel panel-default">');
         var panelHeader = $('<div class="panel-header">');
-        panelHeader.html("<h3>Select User</h3>");
+        panelHeader.append('<div class="row"><div class="col-lg-6"><h3 class="col-lg-9 card-title">Select User</h3></div> \
+            <div class="col-lg-6"><div class="input-group mb-3"> \
+            <input type="text" class="form-control" placeholder="Search..." id="search" aria-label="Search" value="ttt" aria-describedby="basic-addon2"> \
+            <div class="input-group-append"> \
+                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i>\
+                </button> \
+            </div></div></div></div>');
 
         var panelBody = $('<div class="panel-body" style="margin-top:1rem;">');
         var userList = $('<div>');
@@ -756,7 +762,8 @@
         
 
         var form_data = {
-            mission_id: mission_id
+            mission_id: mission_id,
+            filter: $('#userlistpanel #search').val()
         }
         let callbacks = {
             success: function (data) {
@@ -830,7 +837,7 @@
                     tbody.append(row);
                 });
                 table.append(tbody);
-                var newDiv = $('<div class="table table-responsive p-3" >');
+                var newDiv = $('<div class="table table-responsive p-3" style="max-height:600px; overflow: scroll;">');
                 newDiv.append(table);
                 userList.append(newDiv);
 
