@@ -196,14 +196,14 @@ input.hidestep::-webkit-inner-spin-button {
                                                             data-original-title="Edit">
                                                             <i class="bi bi-pencil-square"></i>
                                                         </a>
-                                                        <a href="{{ URL('mission') }}/{{ $DT->id }}/edit"
+                                                      <!--  <a href="{{ URL('mission') }}/{{ $DT->id }}/edit"
                                                             class="btn btn-primary mx-3 btn btn-sm align-items-center"
                                                             data-url="{{ URL('mission') }}/{{ $DT->id }}/"
                                                             data-ajax-popup="true" data-title="Edit Coupon"
                                                             data-bs-toggle="tooltip" title="Edit"
                                                             data-original-title="Edit">
                                                             <i class="bi bi-pencil-square"></i>
-                                                        </a>
+                                                        </a> -->
                                                     </div>
                                                 </span>
                                             </td>
